@@ -29,9 +29,14 @@
 
         .input-guide { font-weight: bold; color: #666; margin: 10px 0 5px 0; display: block; font-size: 0.8rem; border-left: 3px solid var(--accent); padding-left: 8px; }
 
+        /* 加大 Date Input 樣式 */
+        #det-date { 
+            display: block; width: 100%; padding: 12px; margin: 10px 0; border: 2px solid var(--primary); border-radius: 8px; background: #fff; font-size: 1.1rem; cursor: pointer;
+        }
+
         .exp-chip { display: block; background: #ffffff; padding: 12px; border-radius: 8px; font-size: 0.95rem; cursor: pointer; border: 2px solid #e2e8f0; margin-bottom: 8px; transition: 0.2s; }
         .exp-chip:hover { border-color: var(--primary); background: #f8fafc; }
-        .exp-chip:active { transform: scale(0.98); }
+        .exp-chip u { text-decoration: underline; font-weight: bold; }
 
         .practice-zone { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); background: white; border: 4px solid var(--primary); border-radius: 15px; padding: 15px; box-shadow: 0 -5px 20px rgba(0,0,0,0.2); width: calc(100% - 30px); max-width: 820px; z-index: 1000; }
         textarea { width: 100%; height: 70px; border: none; font-size: 1.1rem; font-family: inherit; resize: none; outline: none; margin-bottom: 10px; display: block; }
@@ -40,31 +45,20 @@
         .btn-listen { background: #f1f5f9; color: #475569; }
         
         .btn-rec { background: #fee2e2; color: #b91c1c; transition: all 0.3s; }
-        .btn-rec.active { 
-            background: var(--error); 
-            color: white; 
-            animation: pulse-red 1.2s infinite; 
-        }
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
+        .btn-rec.active { background: var(--error); color: white; animation: pulse-red 1.2s infinite; }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
         .progress-container { background: #e5e7eb; border-radius: 20px; height: 12px; margin-bottom: 15px; overflow: hidden; }
         .progress-bar { background: var(--success); height: 100%; width: 0%; transition: width 0.5s ease; }
         .game-status { background: var(--dark); color: white; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
         
         .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
-        .v-card { 
-            background: white; padding: 25px 5px; border-radius: 10px; border: 1px solid #ddd; text-align: center; cursor: pointer; transition: 0.2s; position: relative; font-weight: bold; font-size: 0.85rem; word-wrap: break-word; overflow: hidden; display: flex; align-items: center; justify-content: center; min-height: 70px;
-        }
+        .v-card { background: white; padding: 25px 5px; border-radius: 10px; border: 1px solid #ddd; text-align: center; cursor: pointer; transition: 0.2s; position: relative; font-weight: bold; font-size: 0.85rem; word-wrap: break-word; overflow: hidden; display: flex; align-items: center; justify-content: center; min-height: 70px; }
         .v-card.ko { background: var(--success); color: white; border-color: #059669; }
         .v-card .tick-stamp { display: none; position: absolute; top: 4px; right: 6px; font-size: 0.8rem; }
         .v-card.ko .tick-stamp { display: block; }
 
         #v-practice-window { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: white; border: 4px solid var(--accent); border-radius: 20px; padding: 20px; z-index: 3000; box-shadow: 0 10px 40px rgba(0,0,0,0.3); text-align: center; }
-        .v-practice-title { font-size: 1.8rem; font-weight: 800; color: var(--dark); margin-bottom: 15px; display: block; }
         #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 4000; align-items: center; justify-content: center; }
         .modal-content { background: white; padding: 25px; border-radius: 20px; text-align: center; width: 85%; max-width: 350px; }
     </style>
@@ -75,7 +69,7 @@
 
 <div class="main-tabs">
     <button class="tab-btn active" onclick="switchTab('practice')">Expressions</button>
-    <button class="tab-btn" onclick="switchTab('vocab')">Vocab Game</button>
+    <button class="tab-btn" onclick="switchTab('vocab')">Vocab Challenge 🗣️</button>
 </div>
 
 <div id="practice" class="container active">
@@ -90,9 +84,9 @@
 
     <div id="sec1" class="sec-content">
         <div class="card"><span class="box-label">Greeting</span>
+            <div class="exp-chip" onclick="selectExp(this)">Hi, everybody!</div>
             <div class="exp-chip" onclick="selectExp(this)">Good morning, everybody!</div>
             <div class="exp-chip" onclick="selectExp(this)">Good afternoon, everybody!</div>
-            <div class="exp-chip" onclick="selectExp(this)">Hi/Hello, everybody!</div>
         </div>
         <div class="card"><span class="box-label">Welcome the Audience</span>
             <div class="exp-chip" onclick="selectExp(this)">Thank you for coming to this briefing session.</div>
@@ -106,34 +100,41 @@
     </div>
 
     <div id="sec2" class="sec-content" style="display:none">
-        <div class="card"><span class="box-label">Topic Selection</span>
+        <div class="card"><span class="box-label">Purpose of Briefing</span>
             <span class="input-guide">Choose Heading:</span>
             <div class="exp-chip" onclick="selectPurpose('header', this)">Today, I’d like to introduce</div>
             <div class="exp-chip" onclick="selectPurpose('header', this)">May I take this opportunity today to introduce</div>
+            
             <span class="input-guide">Choose Topic:</span>
-            <div class="exp-chip" onclick="selectPurpose('topic', this)">a new homework help app to you.</div>
-            <div class="exp-chip" onclick="selectPurpose('topic', this)">a new book exchange service to you.</div>
-            <div class="exp-chip" onclick="selectPurpose('topic', this)">a new recycled clothing store to you.</div>
-            <div class="exp-chip" onclick="selectPurpose('topic', this)">a new art class for kids to you.</div>
+            <div class="exp-chip" onclick="selectPurpose('topic', this)">a new <u><b>homework help app</b></u> to you.</div>
+            <div class="exp-chip" onclick="selectPurpose('topic', this)">a new <u><b>book exchange service</b></u> to you.</div>
+            <div class="exp-chip" onclick="selectPurpose('topic', this)">a new <u><b>recycled clothing store</b></u> to you.</div>
+            <div class="exp-chip" onclick="selectPurpose('topic', this)">a new <u><b>art class for kids</b></u> to you.</div>
         </div>
     </div>
 
     <div id="sec3" class="sec-content" style="display:none">
         <div class="card"><span class="box-label">1. Date & Name</span>
-            <span class="input-guide">Select Date: <input type="date" id="det-date" onchange="updateDetailSentences()"></span>
-            <div class="exp-chip" id="sent-hw" onclick="selectExp(this)">Starting from [Date], we’ll have a new app called Wise Learners.</div>
-            <div class="exp-chip" id="sent-be" onclick="selectExp(this)">Starting from [Date], we’ll have a new service called Great Book Exchange.</div>
-            <div class="exp-chip" id="sent-rc" onclick="selectExp(this)">Starting from [Date], we’ll have a new store called Eco Closet.</div>
-            <div class="exp-chip" id="sent-ac" onclick="selectExp(this)">Starting from [Date], we’ll have a new class called Best Art Class.</div>
+            <span class="input-guide">Select Starting Date:</span>
+            <input type="date" id="det-date" onchange="updateDetailSentences()">
+            
+            <div class="exp-chip" id="sent-hw" onclick="selectExp(this)">Starting from [Date], we’ll have a new app called '<u><b>Wise Learners</b></u>'.</div>
+            <div class="exp-chip" id="sent-be" onclick="selectExp(this)">Starting from [Date], we’ll have a new service called '<u><b>Great Book Exchange</b></u>'.</div>
+            <div class="exp-chip" id="sent-rc" onclick="selectExp(this)">Starting from [Date], we’ll have a new store called '<u><b>Eco Closet</b></u>'.</div>
+            <div class="exp-chip" id="sent-ac" onclick="selectExp(this)">Starting from [Date], we’ll have a new class called '<u><b>Best Art Class</b></u>'.</div>
         </div>
         <div class="card"><span class="box-label">2. Fee</span>
-            <span class="input-guide">Enter Fee: $<input type="number" id="det-fee" value="500" onchange="updateDetailSentences()"></span>
+            <span class="input-guide">Enter Fee: $<input type="number" id="det-fee" value="500" onchange="updateDetailSentences()" style="width: 80px; padding: 5px;"></span>
             <div class="exp-chip" id="sent-fee" onclick="selectExp(this)">The fee is 500 dollars.</div>
         </div>
         <div class="card"><span class="box-label">3. Enquiries</span>
             <span class="input-guide">Choose Heading:</span>
             <div class="exp-chip" onclick="selectInfo('header', this)">For enquiries,</div>
+            <div class="exp-chip" onclick="selectInfo('header', this)">For more enquiries,</div>
             <div class="exp-chip" onclick="selectInfo('header', this)">For details,</div>
+            <div class="exp-chip" onclick="selectInfo('header', this)">For more details,</div>
+            <div class="exp-chip" onclick="selectInfo('header', this)">For more information,</div>
+            
             <span class="input-guide">Choose Action:</span>
             <div class="exp-chip" onclick="selectInfo('action', this)">please call our hotline.</div>
             <div class="exp-chip" onclick="selectInfo('action', this)">please visit our website.</div>
@@ -147,11 +148,12 @@
             <span class="input-guide">Choose Condition:</span>
             <div class="exp-chip" onclick="selectOffer('cond', this)">If you enrol for the course this month,</div>
             <div class="exp-chip" onclick="selectOffer('cond', this)">If you register for the event now,</div>
-            <div class="exp-chip" onclick="selectOffer('cond', this)">If you sign up today,</div>
+            <div class="exp-chip" onclick="selectOffer('cond', this)">If you join our membership today,</div>
+            
             <span class="input-guide">Choose Offer:</span>
             <div class="exp-chip" onclick="selectOffer('offer', this)">we'll offer you a 10% discount.</div>
             <div class="exp-chip" onclick="selectOffer('offer', this)">we'll offer you a free stationery kit.</div>
-            <div class="exp-chip" onclick="selectOffer('offer', this)">we'll offer you a free souvenir.</div>
+            <div class="exp-chip" onclick="selectOffer('offer', this)">we'll offer you a free e-book reader.</div>
         </div>
     </div>
 
@@ -160,6 +162,7 @@
             <div class="exp-chip" onclick="selectExp(this)">I’d like to invite you to our trial class.</div>
             <div class="exp-chip" onclick="selectExp(this)">I’d like to invite you to our demonstration.</div>
             <div class="exp-chip" onclick="selectExp(this)">I’d like to invite you to our taster session.</div>
+            <div class="exp-chip" onclick="selectExp(this)">I’d like to invite you to our pop-up store.</div>
         </div>
         <div class="card"><span class="box-label">2. Sign Up</span>
             <div class="exp-chip" onclick="selectExp(this)">If you’re interested, please sign up at our counter.</div>
@@ -204,7 +207,7 @@
 </div>
 
 <div id="v-practice-window">
-    <span class="v-practice-title" id="v-active-word">Word</span>
+    <span class="v-practice-title" id="v-active-word" style="font-size: 1.8rem; font-weight: 800; color: var(--dark); margin-bottom: 15px; display: block;">Word</span>
     <div class="btn-group">
         <button class="btn-action btn-listen" onclick="speakActive()">🔊 Listen</button>
         <button class="btn-action btn-rec" id="v-rec-btn" onclick="handleRecClick(this, true)">🎤 Record</button>
@@ -301,10 +304,10 @@
         const d = document.getElementById('det-date').value;
         const f = document.getElementById('det-fee').value;
         const dateStr = d ? new Date(d).toLocaleDateString('en-GB', {day:'numeric', month:'long'}) : "[Date]";
-        document.getElementById('sent-hw').innerText = `Starting from ${dateStr}, we’ll have a new app called Wise Learners.`;
-        document.getElementById('sent-be').innerText = `Starting from ${dateStr}, we’ll have a new service called Great Book Exchange.`;
-        document.getElementById('sent-rc').innerText = `Starting from ${dateStr}, we’ll have a new store called Eco Closet.`;
-        document.getElementById('sent-ac').innerText = `Starting from ${dateStr}, we’ll have a new class called Best Art Class.`;
+        document.getElementById('sent-hw').innerHTML = `Starting from ${dateStr}, we’ll have a new app called '<u><b>Wise Learners</b></u>'.`;
+        document.getElementById('sent-be').innerHTML = `Starting from ${dateStr}, we’ll have a new service called '<u><b>Great Book Exchange</b></u>'.`;
+        document.getElementById('sent-rc').innerHTML = `Starting from ${dateStr}, we’ll have a new store called '<u><b>Eco Closet</b></u>'.`;
+        document.getElementById('sent-ac').innerHTML = `Starting from ${dateStr}, we’ll have a new class called '<u><b>Best Art Class</b></u>'.`;
         document.getElementById('sent-fee').innerText = `The fee is ${f} dollars.`;
     }
 
@@ -317,60 +320,35 @@
     function speakText() { speak(document.getElementById('practice-text').value); }
     function speakActive() { speak(currentWord); }
 
-    // --- 核心錄音修復：手動觸發邏輯 ---
     function handleRecClick(btn, isGame) {
-        if (!isRecording) {
-            startRecordingManual(btn, isGame);
-        } else {
-            stopRecordingManual();
-        }
+        if (!isRecording) startRecordingManual(btn, isGame);
+        else stopRecordingManual();
     }
 
     function startRecordingManual(btn, isGame) {
         const target = isGame ? currentWord : document.getElementById('practice-text').value;
         if (!target) return;
-
         const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
         if (!Rec) return alert("Browser not supported.");
-
-        lastHeard = ""; // 重置暫存
+        lastHeard = "";
         recognition = new Rec();
         recognition.lang = 'en-US';
-        recognition.interimResults = true; // 開啟即時結果偵測
+        recognition.interimResults = true;
         recognition.continuous = true;
-
-        recognition.onstart = () => {
-            isRecording = true;
-            btn.classList.add('active');
-            btn.innerText = "🛑 Stop & Check";
-        };
-
-        recognition.onresult = (e) => {
-            // 不斷更新最後聽到的內容
-            lastHeard = Array.from(e.results)
-                .map(r => r[0].transcript)
-                .join('').toLowerCase().trim();
-        };
-
+        recognition.onstart = () => { isRecording = true; btn.classList.add('active'); btn.innerText = "🛑 Stop & Check"; };
+        recognition.onresult = (e) => { lastHeard = Array.from(e.results).map(r => r[0].transcript).join('').toLowerCase().trim(); };
         recognition.onerror = () => stopRecordingManual();
-        
         recognition.start();
     }
 
     function stopRecordingManual() {
         if (!recognition) return;
-        
-        // 1. 停止引擎
         recognition.stop();
         isRecording = false;
-
-        // 2. 恢復 UI
         document.querySelectorAll('.btn-rec').forEach(b => {
             b.classList.remove('active');
             b.innerText = b.id === 'main-rec-btn' ? "🎤 Start Recording" : "🎤 Record";
         });
-
-        // 3. 立即進行分析 (不管最後聽到什麼，就算沒聽到也會彈出 Modal)
         analyzeVoice();
     }
 
@@ -378,24 +356,11 @@
         const isGame = document.getElementById('vocab').classList.contains('active') || document.getElementById('v-practice-window').style.display === 'block';
         const target = isGame ? currentWord : document.getElementById('practice-text').value;
         const targetLower = target.toLowerCase().trim();
-        
-        // 分析邏輯：必須準確匹配單字
         let isMatch = false;
-        if (isGame) {
-            isMatch = (lastHeard === targetLower || lastHeard.includes(targetLower));
-        } else {
-            // 句子則比對第一個單字及長度相近程度
-            const firstWord = targetLower.split(' ')[0];
-            isMatch = lastHeard.includes(firstWord) && lastHeard.length > (targetLower.length * 0.5);
-        }
-
-        if (isGame && isMatch) {
-            document.getElementById('v-' + target).classList.add('ko');
-            koList.add(target);
-            updateProgress();
-        }
-
-        showModal(isMatch, lastHeard || "(No sound detected)", target);
+        if (isGame) { isMatch = (lastHeard === targetLower || lastHeard.includes(targetLower)); }
+        else { const firstWord = targetLower.split(' ')[0]; isMatch = lastHeard.includes(firstWord) && lastHeard.length > (targetLower.length * 0.4); }
+        if (isGame && isMatch) { document.getElementById('v-' + target).classList.add('ko'); koList.add(target); updateProgress(); }
+        showModal(isMatch, lastHeard || "(No sound)", target);
     }
 
     function showModal(isOk, heard, target) {
