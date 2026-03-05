@@ -39,17 +39,16 @@
         .btn-action { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .btn-listen { background: #f1f5f9; color: #475569; }
         
-        /* 錄音按鈕閃爍效果 */
         .btn-rec { background: #fee2e2; color: #b91c1c; transition: all 0.3s; }
         .btn-rec.active { 
             background: var(--error); 
             color: white; 
-            animation: pulse-red 1.5s infinite; 
+            animation: pulse-red 1.2s infinite; 
         }
         @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); opacity: 1; }
-            50% { opacity: 0.6; }
-            100% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); opacity: 1; }
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
         }
 
         .progress-container { background: #e5e7eb; border-radius: 20px; height: 12px; margin-bottom: 15px; overflow: hidden; }
@@ -111,7 +110,6 @@
             <span class="input-guide">Choose Heading:</span>
             <div class="exp-chip" onclick="selectPurpose('header', this)">Today, I’d like to introduce</div>
             <div class="exp-chip" onclick="selectPurpose('header', this)">May I take this opportunity today to introduce</div>
-            
             <span class="input-guide">Choose Topic:</span>
             <div class="exp-chip" onclick="selectPurpose('topic', this)">a new homework help app to you.</div>
             <div class="exp-chip" onclick="selectPurpose('topic', this)">a new book exchange service to you.</div>
@@ -136,7 +134,6 @@
             <span class="input-guide">Choose Heading:</span>
             <div class="exp-chip" onclick="selectInfo('header', this)">For enquiries,</div>
             <div class="exp-chip" onclick="selectInfo('header', this)">For details,</div>
-            
             <span class="input-guide">Choose Action:</span>
             <div class="exp-chip" onclick="selectInfo('action', this)">please call our hotline.</div>
             <div class="exp-chip" onclick="selectInfo('action', this)">please visit our website.</div>
@@ -151,7 +148,6 @@
             <div class="exp-chip" onclick="selectOffer('cond', this)">If you enrol for the course this month,</div>
             <div class="exp-chip" onclick="selectOffer('cond', this)">If you register for the event now,</div>
             <div class="exp-chip" onclick="selectOffer('cond', this)">If you sign up today,</div>
-            
             <span class="input-guide">Choose Offer:</span>
             <div class="exp-chip" onclick="selectOffer('offer', this)">we'll offer you a 10% discount.</div>
             <div class="exp-chip" onclick="selectOffer('offer', this)">we'll offer you a free stationery kit.</div>
@@ -191,7 +187,7 @@
         <textarea id="practice-text" placeholder="Click any phrase..."></textarea>
         <div class="btn-group">
             <button class="btn-action btn-listen" onclick="speakText()">🔊 Listen</button>
-            <button class="btn-action btn-rec" id="main-rec-btn" onclick="toggleRec(this, false)">🎤 Start Recording</button>
+            <button class="btn-action btn-rec" id="main-rec-btn" onclick="handleRecClick(this, false)">🎤 Start Recording</button>
         </div>
     </div>
 </div>
@@ -211,7 +207,7 @@
     <span class="v-practice-title" id="v-active-word">Word</span>
     <div class="btn-group">
         <button class="btn-action btn-listen" onclick="speakActive()">🔊 Listen</button>
-        <button class="btn-action btn-rec" id="v-rec-btn" onclick="toggleRec(this, true)">🎤 Record</button>
+        <button class="btn-action btn-rec" id="v-rec-btn" onclick="handleRecClick(this, true)">🎤 Record</button>
     </div>
     <button style="margin-top:15px; width:100%; padding:10px; background:#eee; border:none; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="closePractice()">Close</button>
 </div>
@@ -230,6 +226,7 @@
     let combos = { purpose: { header: "", topic: "" }, info: { header: "", action: "" }, offer: { cond: "", offer: "" } };
     let recognition;
     let isRecording = false;
+    let lastHeard = "";
 
     function init() {
         const saved = localStorage.getItem('vocab_ko_list_strict');
@@ -255,7 +252,7 @@
     }
 
     function closePractice() {
-        if(isRecording) stopSpeech();
+        if(isRecording) stopRecordingManual();
         document.getElementById('v-practice-window').style.display = 'none';
         currentWord = "";
     }
@@ -320,95 +317,92 @@
     function speakText() { speak(document.getElementById('practice-text').value); }
     function speakActive() { speak(currentWord); }
 
-    function toggleRec(btn, isGame) {
-        if (!isRecording) startSpeech(btn, isGame ? currentWord : document.getElementById('practice-text').value, isGame);
-        else stopSpeech();
+    // --- 核心錄音修復：手動觸發邏輯 ---
+    function handleRecClick(btn, isGame) {
+        if (!isRecording) {
+            startRecordingManual(btn, isGame);
+        } else {
+            stopRecordingManual();
+        }
     }
 
-    function startSpeech(btn, target, isGame) {
+    function startRecordingManual(btn, isGame) {
+        const target = isGame ? currentWord : document.getElementById('practice-text').value;
         if (!target) return;
-        
-        // 1. 先清除舊的狀態
-        if (recognition) {
-            recognition.abort();
-        }
 
         const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
-        if (!Rec) {
-            alert("Speech recognition is not supported in this browser.");
-            return;
-        }
+        if (!Rec) return alert("Browser not supported.");
 
-        isRecording = true;
-        btn.classList.add('active');
-        btn.innerText = "🛑 Stop";
-
+        lastHeard = ""; // 重置暫存
         recognition = new Rec();
         recognition.lang = 'en-US';
-        recognition.interimResults = false;
-        recognition.maxAlternatives = 1;
+        recognition.interimResults = true; // 開啟即時結果偵測
+        recognition.continuous = true;
 
-        // 2. 設定辨識結果處理
+        recognition.onstart = () => {
+            isRecording = true;
+            btn.classList.add('active');
+            btn.innerText = "🛑 Stop & Check";
+        };
+
         recognition.onresult = (e) => {
-            const heard = e.results[0][0].transcript.toLowerCase().trim();
-            const targetWord = target.toLowerCase().trim();
-            
-            let isMatch = false;
-            if (isGame) {
-                // 單字辨識：完全相同或包含該字
-                isMatch = (heard === targetWord || heard.includes(targetWord));
-            } else {
-                // 句子辨識：包含第一個關鍵字 (起始位)
-                isMatch = heard.includes(targetWord.split(' ')[0]);
-            }
-
-            if(isGame && isMatch) {
-                document.getElementById('v-'+target).classList.add('ko');
-                koList.add(target);
-                updateProgress();
-            }
-            showModal(isMatch, heard, target);
-            stopSpeech(); // 成功後自動停止
+            // 不斷更新最後聽到的內容
+            lastHeard = Array.from(e.results)
+                .map(r => r[0].transcript)
+                .join('').toLowerCase().trim();
         };
 
-        // 3. 錯誤處理
-        recognition.onerror = (event) => {
-            console.error("Speech Recognition Error:", event.error);
-            stopSpeech();
-        };
-
-        // 4. 當錄音自然結束
-        recognition.onend = () => {
-            if (isRecording) stopSpeech();
-        };
-
-        try {
-            recognition.start();
-        } catch (err) {
-            console.error("Failed to start recognition:", err);
-            stopSpeech();
-        }
+        recognition.onerror = () => stopRecordingManual();
+        
+        recognition.start();
     }
 
-    function stopSpeech() {
-        if (recognition) {
-            recognition.onresult = null;
-            recognition.onerror = null;
-            recognition.onend = null;
-            recognition.abort();
-        }
+    function stopRecordingManual() {
+        if (!recognition) return;
+        
+        // 1. 停止引擎
+        recognition.stop();
         isRecording = false;
+
+        // 2. 恢復 UI
         document.querySelectorAll('.btn-rec').forEach(b => {
             b.classList.remove('active');
             b.innerText = b.id === 'main-rec-btn' ? "🎤 Start Recording" : "🎤 Record";
         });
+
+        // 3. 立即進行分析 (不管最後聽到什麼，就算沒聽到也會彈出 Modal)
+        analyzeVoice();
+    }
+
+    function analyzeVoice() {
+        const isGame = document.getElementById('vocab').classList.contains('active') || document.getElementById('v-practice-window').style.display === 'block';
+        const target = isGame ? currentWord : document.getElementById('practice-text').value;
+        const targetLower = target.toLowerCase().trim();
+        
+        // 分析邏輯：必須準確匹配單字
+        let isMatch = false;
+        if (isGame) {
+            isMatch = (lastHeard === targetLower || lastHeard.includes(targetLower));
+        } else {
+            // 句子則比對第一個單字及長度相近程度
+            const firstWord = targetLower.split(' ')[0];
+            isMatch = lastHeard.includes(firstWord) && lastHeard.length > (targetLower.length * 0.5);
+        }
+
+        if (isGame && isMatch) {
+            document.getElementById('v-' + target).classList.add('ko');
+            koList.add(target);
+            updateProgress();
+        }
+
+        showModal(isMatch, lastHeard || "(No sound detected)", target);
     }
 
     function showModal(isOk, heard, target) {
         document.getElementById('modal').style.display = 'flex';
         document.getElementById('m-icon').innerText = isOk ? "🔥" : "❌";
-        document.getElementById('m-title').innerText = isOk ? "Correct!" : "Incorrect";
-        document.getElementById('m-msg').innerHTML = isOk ? `Perfect! I heard: "${heard}"` : `I heard: "<b>${heard}</b>"<br>Target: "<b>${target}</b>"`;
+        document.getElementById('m-title').innerText = isOk ? "Correct!" : "Try Again";
+        document.getElementById('m-msg').innerHTML = `I heard: "<b>${heard}</b>"<br>Target: "<b>${target}</b>"`;
     }
 
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
