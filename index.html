@@ -6,71 +6,68 @@
     <title>VEN2101 IA Prep Task Helper</title>
     <style>
         :root {
-            /* 風格改動：藍色 tone 改做黑灰色 tone */
-            --primary: #000000; /* 主色改為黑色 */
-            --bg: #e5e7eb;      /* 背景灰色稍微加深，突出白色卡片 */
+            --primary: #000000; 
+            --bg: #f8fafc;      /* 改用極淺灰背景，拉開與卡片的層次 */
             --white: #ffffff;
-            --accent: #f59e0b;  /* 黃色保持不變 */
-            --dark: #1f2937;    /* Header 背景保持不變 */
-            --success: #10b981; /* 綠色保持不變 */
-            --error: #ef4444;   /* 紅色保持不變 */
-            --highlight: #facc15; /* 黃色外框保持不變 */
+            --accent: #f59e0b;
+            --dark: #000000;    /* 文字與標題全部改為純黑，解決模糊感 */
+            --success: #16a34a; 
+            --error: #dc2626;   
+            --highlight: #facc15;
+            --border: #334155;  /* 深色邊框 */
         }
         * { box-sizing: border-box; } 
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--dark); }
-        header { background: var(--dark); color: white; padding: 15px; text-align: center; border-bottom: 4px solid var(--primary); }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--dark); -webkit-font-smoothing: antialiased; }
+        header { background: var(--dark); color: white; padding: 18px; text-align: center; border-bottom: 5px solid #333; }
         
-        .main-tabs { display: flex; background: white; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .tab-btn { flex: 1; padding: 15px; border: none; background: none; font-weight: bold; cursor: pointer; color: #6b7280; border-bottom: 3px solid transparent; }
+        .main-tabs { display: flex; background: white; position: sticky; top: 0; z-index: 100; border-bottom: 2px solid var(--primary); }
+        .tab-btn { flex: 1; padding: 15px; border: none; background: none; font-weight: 800; cursor: pointer; color: #64748b; border-bottom: 4px solid transparent; text-transform: uppercase; letter-spacing: 1px; }
         .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
 
         .container { padding: 15px; max-width: 100%; width: 850px; margin: 0 auto; display: none; padding-bottom: 180px; }
         .container.active { display: block; }
 
         .section-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
-        .nav-item { padding: 10px; background: #d1d5db; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.8rem; color: var(--dark); }
-        .nav-item.active { background: var(--primary); color: white; }
+        .nav-item { padding: 12px; background: #e2e8f0; border: 2px solid #cbd5e1; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.85rem; color: var(--dark); }
+        .nav-item.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        .card { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 15px; }
-        .box-label { font-weight: bold; color: var(--primary); font-size: 0.85rem; margin-bottom: 10px; display: block; background: #f3f4f6; padding: 5px 10px; border-radius: 5px; }
+        .card { background: white; border-radius: 12px; padding: 18px; border: 2px solid #e2e8f0; margin-bottom: 15px; box-shadow: 4px 4px 0px rgba(0,0,0,0.05); }
+        .box-label { font-weight: 900; color: white; font-size: 0.85rem; margin-bottom: 12px; display: inline-block; background: var(--primary); padding: 4px 12px; border-radius: 4px; }
 
-        .input-guide { font-weight: bold; color: #666; margin: 10px 0 5px 0; display: block; font-size: 0.8rem; border-left: 3px solid var(--accent); padding-left: 8px; }
+        .input-guide { font-weight: 800; color: #475569; margin: 10px 0 5px 0; display: block; font-size: 0.85rem; border-left: 4px solid var(--accent); padding-left: 10px; }
 
         #det-date { 
-            display: inline-block; width: auto; min-width: 180px; padding: 8px 12px; margin: 10px 0; border: 3px solid var(--highlight); border-radius: 8px; background: #fff; font-size: 1rem; cursor: pointer; outline: none;
+            display: inline-block; width: auto; min-width: 180px; padding: 10px; margin: 10px 0; border: 3px solid var(--highlight); border-radius: 8px; font-weight: bold; outline: none;
         }
 
         #det-fee {
-            width: 100px; padding: 8px; border: 3px solid var(--highlight); border-radius: 8px; font-size: 1rem; font-weight: bold; outline: none;
+            width: 120px; padding: 10px; border: 3px solid var(--highlight); border-radius: 8px; font-size: 1.1rem; font-weight: 900; outline: none;
         }
 
-        .exp-chip { display: block; background: #ffffff; padding: 12px; border-radius: 8px; font-size: 0.95rem; cursor: pointer; border: 2px solid #e2e8f0; margin-bottom: 8px; transition: 0.2s; color: var(--dark); }
-        .exp-chip:hover { border-color: var(--primary); background: #f8fafc; }
-        .exp-chip u { text-decoration: underline; font-weight: bold; }
+        .exp-chip { display: block; background: #ffffff; padding: 14px; border-radius: 10px; font-size: 1rem; cursor: pointer; border: 2px solid #d1d5db; margin-bottom: 10px; color: var(--dark); font-weight: 500; }
+        .exp-chip:hover { border-color: var(--primary); background: #f1f5f9; }
+        .exp-chip u { text-decoration: underline; font-weight: 800; }
 
-        .practice-zone { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); background: white; border: 4px solid var(--primary); border-radius: 15px; padding: 15px; box-shadow: 0 -5px 20px rgba(0,0,0,0.2); width: calc(100% - 30px); max-width: 820px; z-index: 1000; }
-        textarea { width: 100%; height: 70px; border: none; font-size: 1.1rem; font-family: inherit; resize: none; outline: none; margin-bottom: 10px; display: block; color: var(--dark); }
-        .btn-group { display: flex; gap: 10px; }
-        .btn-action { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
-        .btn-listen { background: #f1f5f9; color: #475569; }
+        .practice-zone { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); background: white; border: 5px solid var(--primary); border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); width: calc(100% - 30px); max-width: 820px; z-index: 1000; }
+        textarea { width: 100%; height: 75px; border: none; font-size: 1.2rem; font-weight: 600; font-family: inherit; resize: none; outline: none; margin-bottom: 12px; color: var(--dark); }
+        .btn-group { display: flex; gap: 12px; }
+        .btn-action { flex: 1; padding: 14px; border-radius: 10px; border: none; font-weight: 800; cursor: pointer; font-size: 1rem; }
+        .btn-listen { background: #e2e8f0; color: var(--dark); border: 2px solid #cbd5e1; }
         
-        .btn-rec { background: #fee2e2; color: #b91c1c; transition: all 0.3s; }
-        .btn-rec.active { background: var(--error); color: white; animation: pulse-red 1.2s infinite; }
-        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+        .btn-rec { background: #fee2e2; color: #b91c1c; border: 2px solid #fecaca; }
+        .btn-rec.active { background: #dc2626; color: white; animation: pulse-red 1.2s infinite; }
 
-        .progress-container { background: #d1d5db; border-radius: 20px; height: 12px; margin-bottom: 15px; overflow: hidden; }
-        .progress-bar { background: var(--success); height: 100%; width: 0%; transition: width 0.5s ease; }
-        .game-status { background: var(--dark); color: white; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .progress-container { background: #e2e8f0; border-radius: 20px; height: 16px; margin-bottom: 15px; border: 2px solid #cbd5e1; }
+        .progress-bar { background: #16a34a; height: 100%; transition: width 0.5s ease; }
+        .game-status { background: var(--dark); color: white; padding: 12px; border-radius: 10px; margin-bottom: 15px; font-weight: bold; }
         
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
-        .v-card { background: white; padding: 25px 5px; border-radius: 10px; border: 1px solid #ddd; text-align: center; cursor: pointer; transition: 0.2s; position: relative; font-weight: bold; font-size: 0.85rem; word-wrap: break-word; overflow: hidden; display: flex; align-items: center; justify-content: center; min-height: 70px; color: var(--dark); }
-        .v-card.ko { background: var(--success); color: white; border-color: #059669; }
-        .v-card .tick-stamp { display: none; position: absolute; top: 4px; right: 6px; font-size: 0.8rem; }
-        .v-card.ko .tick-stamp { display: block; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+        .v-card { background: white; padding: 20px 8px; border-radius: 12px; border: 2px solid #cbd5e1; text-align: center; cursor: pointer; font-weight: 800; font-size: 0.9rem; color: var(--dark); min-height: 80px; display: flex; align-items: center; justify-content: center; }
+        .v-card.ko { background: #16a34a; color: white; border-color: #14532d; }
 
-        #v-practice-window { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: white; border: 4px solid var(--accent); border-radius: 20px; padding: 20px; z-index: 3000; box-shadow: 0 10px 40px rgba(0,0,0,0.3); text-align: center; }
-        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 4000; align-items: center; justify-content: center; }
-        .modal-content { background: white; padding: 25px; border-radius: 20px; text-align: center; width: 85%; max-width: 350px; color: var(--dark); }
+        #v-practice-window { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 420px; background: white; border: 6px solid var(--accent); border-radius: 25px; padding: 25px; z-index: 3000; box-shadow: 0 20px 50px rgba(0,0,0,0.4); text-align: center; }
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 4000; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 25px; text-align: center; width: 85%; max-width: 380px; border: 4px solid var(--primary); }
     </style>
 </head>
 <body>
@@ -111,7 +108,7 @@
 
     <div id="sec2" class="sec-content" style="display:none">
         <div class="card"><span class="box-label">Purpose of Briefing</span>
-            <span class="input-guide">Choose Heading:</span>
+            <span class="input-guide">Choose Type:</span>
             <div class="exp-chip" onclick="selectPurpose('header', this)">Today, I’d like to introduce</div>
             <div class="exp-chip" onclick="selectPurpose('header', this)">May I take this opportunity today to introduce</div>
             
@@ -127,7 +124,6 @@
         <div class="card"><span class="box-label">1. Date & Name</span>
             <span class="input-guide">Select Starting Date:</span>
             <input type="date" id="det-date" onchange="updateDetailSentences()">
-            
             <div class="exp-chip" id="sent-hw" onclick="selectExp(this)">Starting from [Date], we’ll have a new app called '<u><b>Wise Learners</b></u>'.</div>
             <div class="exp-chip" id="sent-be" onclick="selectExp(this)">Starting from [Date], we’ll have a new service called '<u><b>Great Book Exchange</b></u>'.</div>
             <div class="exp-chip" id="sent-rc" onclick="selectExp(this)">Starting from [Date], we’ll have a new store called '<u><b>Eco Closet</b></u>'.</div>
@@ -158,7 +154,6 @@
             <div class="exp-chip" onclick="selectOffer('cond', this)">If you enrol for the course this month,</div>
             <div class="exp-chip" onclick="selectOffer('cond', this)">If you register for the event now,</div>
             <div class="exp-chip" onclick="selectOffer('cond', this)">If you join our membership today,</div>
-            
             <span class="input-guide">Choose Offer:</span>
             <div class="exp-chip" onclick="selectOffer('offer', this)">we'll offer you a 10% discount.</div>
             <div class="exp-chip" onclick="selectOffer('offer', this)">we'll offer you a free stationery kit.</div>
@@ -206,28 +201,24 @@
 
 <div id="vocab" class="container">
     <div class="progress-container"><div class="progress-bar" id="v-progress"></div></div>
-    <div class="game-status">
-        <span>🏆 <b>Mastery Progress</b></span>
-        <span><b id="ko-count">0</b> / 32 ✅</span>
-    </div>
+    <div class="game-status"><span>🏆 Mastery: <b id="ko-count">0</b> / 32 ✅</span></div>
     <span class="box-label">Verbs</span><div class="vocab-grid" id="grid-v"></div><br>
     <span class="box-label">Nouns</span><div class="vocab-grid" id="grid-n"></div><br>
     <span class="box-label">Adjectives</span><div class="vocab-grid" id="grid-a"></div>
 </div>
 
 <div id="v-practice-window">
-    <span class="v-practice-title" id="v-active-word" style="font-size: 1.8rem; font-weight: 800; color: var(--dark); margin-bottom: 15px; display: block;">Word</span>
+    <span id="v-active-word" style="font-size: 2rem; font-weight: 900; color: var(--dark); margin-bottom: 20px; display: block;">Word</span>
     <div class="btn-group">
         <button class="btn-action btn-listen" onclick="speakActive()">🔊 Listen</button>
         <button class="btn-action btn-rec" id="v-rec-btn" onclick="handleRecClick(this, true)">🎤 Record</button>
     </div>
-    <button style="margin-top:15px; width:100%; padding:10px; background:#eee; border:none; border-radius:8px; font-weight:bold; cursor:pointer; color: var(--dark);" onclick="closePractice()">Close</button>
+    <button style="margin-top:20px; width:100%; padding:12px; background:#eee; border:none; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="closePractice()">Close</button>
 </div>
 
-<div id="modal"><div class="modal-content"><div id="m-icon" style="font-size:3rem"></div><h2 id="m-title"></h2><p id="m-msg"></p><button onclick="closeModal()">Next</button></div></div>
+<div id="modal"><div class="modal-content"><div id="m-icon" style="font-size:3.5rem"></div><h2 id="m-title" style="margin:10px 0; font-weight:900;"></h2><p id="m-msg" style="line-height:1.6;"></p><button style="margin-top:15px; width:100%; padding:12px; background:black; color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="closeModal()">Next</button></div></div>
 
 <script>
-    // JS 邏輯完全保持不變，只更新了 LocalStorage 的 Key 名以對應 Strict 模式
     const vocabs = {
         v: ["enrol", "register", "sign up", "visit"],
         n: ["activities", "demonstration", "enquiries", "families", "hotline", "information", "kit", "leaflet", "limited", "manager", "membership", "organisation", "participant", "pop-up store", "poster", "practice", "products", "purchase", "reader", "sales", "store", "subjects", "taster", "trial", "website"],
@@ -242,7 +233,6 @@
     let lastHeard = "";
 
     function init() {
-        // 使用 Strict 模式的 Key
         const saved = localStorage.getItem('vocab_ko_list_strict');
         if (saved) koList = new Set(JSON.parse(saved));
         renderVocab('grid-v', vocabs.v);
@@ -254,7 +244,7 @@
     function renderVocab(id, list) {
         document.getElementById(id).innerHTML = list.map(v => `
             <div class="v-card ${koList.has(v) ? 'ko' : ''}" id="v-${v}" onclick="openPractice('${v}')">
-                <span class="tick-stamp">✅</span>${v}
+                ${v}
             </div>
         `).join('');
     }
@@ -272,9 +262,8 @@
     }
 
     function updateProgress() {
-        const total = 32;
         document.getElementById('ko-count').innerText = koList.size;
-        document.getElementById('v-progress').style.width = (koList.size / total * 100) + "%";
+        document.getElementById('v-progress').style.width = (koList.size / 32 * 100) + "%";
         localStorage.setItem('vocab_ko_list_strict', JSON.stringify(Array.from(koList)));
     }
 
@@ -282,7 +271,6 @@
         document.querySelectorAll('.container, .tab-btn').forEach(el => el.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         event.target.classList.add('active');
-        closePractice();
     }
 
     function showSec(num) {
@@ -295,27 +283,14 @@
     }
 
     function selectExp(el) { document.getElementById('practice-text').value = el.innerText; }
-    
-    function selectPurpose(type, el) { 
-        combos.purpose[type] = el.innerText; 
-        document.getElementById('practice-text').value = (combos.purpose.header + " " + combos.purpose.topic).trim(); 
-    }
-    
-    function selectInfo(type, el) { 
-        combos.info[type] = el.innerText; 
-        document.getElementById('practice-text').value = (combos.info.header + " " + combos.info.action).trim(); 
-    }
-
-    function selectOffer(type, el) { 
-        combos.offer[type] = el.innerText; 
-        document.getElementById('practice-text').value = (combos.offer.cond + " " + combos.offer.offer).trim(); 
-    }
+    function selectPurpose(type, el) { combos.purpose[type] = el.innerText; document.getElementById('practice-text').value = (combos.purpose.header + " " + combos.purpose.topic).trim(); }
+    function selectInfo(type, el) { combos.info[type] = el.innerText; document.getElementById('practice-text').value = (combos.info.header + " " + combos.info.action).trim(); }
+    function selectOffer(type, el) { combos.offer[type] = el.innerText; document.getElementById('practice-text').value = (combos.offer.cond + " " + combos.offer.offer).trim(); }
 
     function updateDetailSentences() {
         const d = document.getElementById('det-date').value;
         const f = document.getElementById('det-fee').value;
         const dateStr = d ? new Date(d).toLocaleDateString('en-GB', {day:'numeric', month:'long'}) : "[Date]";
-        // 文字保持不變
         document.getElementById('sent-hw').innerHTML = `Starting from ${dateStr}, we’ll have a new app called '<u><b>Wise Learners</b></u>'.`;
         document.getElementById('sent-be').innerHTML = `Starting from ${dateStr}, we’ll have a new service called '<u><b>Great Book Exchange</b></u>'.`;
         document.getElementById('sent-rc').innerHTML = `Starting from ${dateStr}, we’ll have a new store called '<u><b>Eco Closet</b></u>'.`;
@@ -323,12 +298,7 @@
         document.getElementById('sent-fee').innerText = `The fee is ${f} dollars.`;
     }
 
-    function speak(t) {
-        window.speechSynthesis.cancel();
-        const m = new SpeechSynthesisUtterance(t);
-        m.lang = 'en-US'; m.rate = 0.85;
-        window.speechSynthesis.speak(m);
-    }
+    function speak(t) { window.speechSynthesis.cancel(); const m = new SpeechSynthesisUtterance(t); m.lang = 'en-US'; m.rate = 0.85; window.speechSynthesis.speak(m); }
     function speakText() { speak(document.getElementById('practice-text').value); }
     function speakActive() { speak(currentWord); }
 
@@ -368,19 +338,32 @@
         const isGame = document.getElementById('vocab').classList.contains('active') || document.getElementById('v-practice-window').style.display === 'block';
         const target = isGame ? currentWord : document.getElementById('practice-text').value;
         const targetLower = target.toLowerCase().trim();
-        let isMatch = false;
-        
-        // 語音異常處理特殊邏輯維持不變 (Strict 模式)
         let heardLower = lastHeard.toLowerCase().trim();
-        if (targetLower.includes("enquiries") && heardLower.includes("inquiries")) {
-            heardLower = heardLower.replace("inquiries", "enquiries");
+        let isMatch = false;
+
+        // --- 容錯處理：處理單複數與相似音 ---
+        const synonyms = {
+            "enquiries": "inquiries",
+            "organisation": "organization",
+            "products": "product",
+            "taster": "taste",
+            "subjects": "subject",
+            "reader": "read"
+        };
+
+        // 雙向檢查
+        for (let key in synonyms) {
+            if ((targetLower.includes(key) && heardLower.includes(synonyms[key])) || 
+                (targetLower.includes(synonyms[key]) && heardLower.includes(key))) {
+                heardLower = heardLower.replace(synonyms[key], key);
+            }
         }
 
         if (isGame) { 
             isMatch = (heardLower === targetLower || heardLower.includes(targetLower)); 
         } else { 
             const firstWord = targetLower.split(' ')[0]; 
-            isMatch = heardLower.includes(firstWord) && heardLower.length > (targetLower.length * 0.4); 
+            isMatch = heardLower.includes(firstWord) && heardLower.length > (targetLower.length * 0.35); 
         }
 
         if (isGame && isMatch) { 
@@ -388,20 +371,16 @@
             koList.add(target); 
             updateProgress(); 
         }
-        
         showModal(isMatch, lastHeard || "(No sound)", target);
     }
 
     function showModal(isOk, heard, target) {
         const compliments = ["Excellent!", "Well done!", "Perfect!", "Keep it up!", "Great job!", "Spot on!"];
-        const randomEncouragement = compliments[Math.floor(Math.random() * compliments.length)];
-        
         document.getElementById('modal').style.display = 'flex';
         document.getElementById('m-icon').innerText = isOk ? "🔥" : "❌";
         document.getElementById('m-title').innerText = isOk ? "Correct!" : "Try Again";
-        
         if (isOk) {
-            document.getElementById('m-msg').innerHTML = `<b style="font-size: 1.2rem; color: var(--success);">${randomEncouragement}</b>`;
+            document.getElementById('m-msg').innerHTML = `<b style="font-size: 1.4rem; color: #16a34a;">${compliments[Math.floor(Math.random() * compliments.length)]}</b>`;
         } else {
             document.getElementById('m-msg').innerHTML = `我聽到: "<b>${heard}</b>"<br>應該是: "<b>${target}</b>"`;
         }
