@@ -355,28 +355,42 @@
         analyzeVoice();
     }
 
-    function analyzeVoice() {
-        const isGame = document.getElementById('vocab').classList.contains('active') || document.getElementById('v-practice-window').style.display === 'block';
-        const target = isGame ? currentWord : document.getElementById('practice-text').value;
-        const targetLower = target.toLowerCase().trim();
-        let isMatch = false;
-        
-        if (isGame) { 
-            isMatch = (lastHeard === targetLower || lastHeard.includes(targetLower)); 
-        } else { 
-            const firstWord = targetLower.split(' ')[0]; 
-            isMatch = lastHeard.includes(firstWord) && lastHeard.length > (targetLower.length * 0.4); 
-        }
+// 請在原本代碼中找到 analyzeVoice 函數並替換為以下邏輯：
 
-        if (isGame && isMatch) { 
-            document.getElementById('v-' + target).classList.add('ko'); 
-            koList.add(target); 
-            updateProgress(); 
-        }
-        
-        showModal(isMatch, lastHeard || "(No sound)", target);
+function analyzeVoice() {
+    const isGame = document.getElementById('vocab').classList.contains('active') || document.getElementById('v-practice-window').style.display === 'block';
+    const target = isGame ? currentWord : document.getElementById('practice-text').value;
+    const targetLower = target.toLowerCase().trim();
+    let heardLower = lastHeard.toLowerCase().trim();
+    
+    let isMatch = false;
+    
+    // --- 特別處理：解決 enquiries 被誤認作 inquiries 的問題 ---
+    if (targetLower.includes("enquiries") && heardLower.includes("inquiries")) {
+        heardLower = heardLower.replace("inquiries", "enquiries");
     }
 
+    if (isGame) { 
+        isMatch = (heardLower === targetLower || heardLower.includes(targetLower)); 
+    } else { 
+        // 針對句子，檢查開頭單詞或整體相似度
+        const firstWord = targetLower.split(' ')[0]; 
+        isMatch = heardLower.includes(firstWord) && heardLower.length > (targetLower.length * 0.35);
+        
+        // 額外寬鬆：如果句子很長且目標字眼出現在辨識結果中
+        if (!isMatch && targetLower.length > 5) {
+            isMatch = heardLower.includes(targetLower.substring(0, 5));
+        }
+    }
+
+    if (isGame && isMatch) { 
+        document.getElementById('v-' + target).classList.add('ko'); 
+        koList.add(target); 
+        updateProgress(); 
+    }
+    
+    showModal(isMatch, lastHeard || "(No sound)", target);
+}
     // --- 核心更新：根據對錯顯示不同 Feedback ---
     function showModal(isOk, heard, target) {
         const compliments = ["Excellent!", "Well done!", "Perfect!", "Keep it up!", "Great job!", "Spot on!"];
