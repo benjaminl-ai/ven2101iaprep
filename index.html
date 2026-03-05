@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Briefing Master - Tailor-made Edition</title>
+    <title>Briefing Master - Oral Dash</title>
     <style>
         :root {
             --primary: #2563eb; --bg: #f3f4f6; --white: #ffffff;
-            --accent: #f59e0b; --dark: #1f2937; --success: #10b981; --fact-bg: #fff7ed;
+            --accent: #f59e0b; --dark: #1f2937; --success: #10b981;
         }
         body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--dark); }
         
@@ -15,40 +15,38 @@
         
         /* Topic Selector */
         .topic-bar { background: #fff; padding: 10px; display: flex; gap: 8px; overflow-x: auto; border-bottom: 1px solid #ddd; }
-        .topic-btn { padding: 10px 15px; border: 1px solid #ddd; border-radius: 8px; background: white; cursor: pointer; white-space: nowrap; font-size: 0.9rem; font-weight: bold; }
-        .topic-btn.active { border-color: var(--primary); color: var(--primary); background: #eff6ff; box-shadow: inset 0 0 0 1px var(--primary); }
+        .topic-btn { padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; background: white; cursor: pointer; white-space: nowrap; font-size: 0.85rem; font-weight: bold; }
+        .topic-btn.active { border-color: var(--primary); color: var(--primary); background: #eff6ff; }
 
-        .layout { display: flex; flex-direction: column; max-width: 1000px; margin: 0 auto; padding: 15px; gap: 15px; }
+        .layout { display: flex; flex-direction: column; max-width: 900px; margin: 0 auto; padding: 15px; gap: 15px; }
 
-        /* Fact Sheet Style */
-        .fact-sheet { background: var(--fact-bg); border: 2px dashed var(--accent); padding: 15px; border-radius: 8px; margin-bottom: 15px; line-height: 1.6; }
-        .fact-title { font-weight: bold; color: #9a3412; border-bottom: 1px solid #fed7aa; margin-bottom: 10px; display: block; }
-
-        /* Navigation Grid */
-        .step-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
-        .nav-btn { padding: 12px; border: none; border-radius: 8px; background: #e5e7eb; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
+        /* Step Buttons */
+        .step-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .nav-btn { padding: 10px; border: none; border-radius: 8px; background: #e5e7eb; cursor: pointer; font-weight: bold; font-size: 0.8rem; color: #4b5563; }
         .nav-btn.active { background: var(--primary); color: white; }
 
-        /* Content Area */
+        /* Main Workspace */
         .workspace { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .section-title { color: var(--primary); margin-top: 0; font-size: 1.1rem; margin-bottom: 15px; }
+        .section-title { color: var(--primary); margin-top: 0; font-size: 1.1rem; border-left: 4px solid var(--primary); padding-left: 10px; }
 
-        textarea { width: 100%; height: 140px; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem; box-sizing: border-box; resize: none; margin-bottom: 10px; }
+        /* Expressions */
+        .exp-box { background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px; border-radius: 8px; margin: 15px 0; max-height: 200px; overflow-y: auto; }
+        .exp-item { font-size: 0.9rem; padding: 6px; border-bottom: 1px solid #edf2f7; cursor: pointer; color: #334155; }
+        .exp-item:hover { background: #f1f5f9; color: var(--primary); }
+        .exp-group-label { font-weight: bold; font-size: 0.75rem; color: var(--accent); text-transform: uppercase; margin-top: 10px; display: block; }
+
+        textarea { width: 100%; height: 120px; padding: 12px; border: 2px solid #e2e8f0; border-radius: 8px; font-size: 1rem; box-sizing: border-box; resize: none; margin-bottom: 10px; }
 
         .action-btns { display: flex; gap: 10px; }
-        .btn-rec { flex: 2; background: #ef4444; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1rem; }
-        .btn-speak { flex: 1; background: #64748b; color: white; border: none; padding: 14px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .btn-rec { flex: 2; background: #ef4444; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .btn-speak { flex: 1; background: #64748b; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
         .recording { animation: pulse 1s infinite; background: #b91c1c; }
-
-        /* Useful Expressions Panel */
-        .exp-panel { display: none; background: #f8fafc; border: 1px solid #cbd5e1; padding: 15px; border-radius: 12px; margin-top: 10px; }
-        .exp-panel.active { display: block; }
-        .exp-item { padding: 8px; border-bottom: 1px solid #e2e8f0; cursor: pointer; font-size: 0.9rem; }
-        .exp-item:hover { color: var(--primary); background: #f1f5f9; }
 
         /* Vocab Bank */
         .vocab-bank { background: #fff; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; }
-        .v-tag { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; margin: 2px; font-weight: 500; }
+        .vocab-title { font-weight: bold; font-size: 0.9rem; margin-bottom: 10px; display: block; }
+        .vocab-list { display: flex; flex-wrap: wrap; gap: 6px; }
+        .v-tag { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 500; }
         .v-verb { background: #dcfce7; color: #166534; }
         .v-noun { background: #dbeafe; color: #1e40af; }
         .v-adj { background: #fef9c3; color: #854d0e; }
@@ -56,9 +54,9 @@
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
         
         @media (min-width: 768px) {
-            .layout { flex-direction: row; }
-            .left-col { flex: 1.5; }
-            .right-col { flex: 1; position: sticky; top: 15px; height: fit-content; }
+            .layout { flex-direction: row; align-items: flex-start; }
+            .left-col { flex: 2; }
+            .right-col { flex: 1; position: sticky; top: 15px; }
         }
     </style>
 </head>
@@ -69,18 +67,15 @@
 </header>
 
 <div class="topic-bar">
-    <button class="topic-btn active" onclick="setTopic('A')">A. Wise Learners</button>
-    <button class="topic-btn" onclick="setTopic('B')">B. Book Exchange</button>
-    <button class="topic-btn" onclick="setTopic('C')">C. Eco Closet</button>
+    <div style="font-size: 0.7rem; font-weight: bold; color: #666; width: 100%;">CHOOSE TOPIC:</div>
+    <button class="topic-btn active" onclick="setTopic('A')">A. Wise Learners (App)</button>
+    <button class="topic-btn" onclick="setTopic('B')">B. Great Book Exchange</button>
+    <button class="topic-btn" onclick="setTopic('C')">C. Eco Closet (Store)</button>
     <button class="topic-btn" onclick="setTopic('D')">D. Best Art Class</button>
-    <button class="topic-btn" style="background: #f1f5f9;" onclick="setTopic('EXPS')">💡 Useful Expressions</button>
 </div>
 
 <div class="layout">
     <div class="left-col">
-        <div id="factSheet" class="fact-sheet">
-            </div>
-
         <div class="step-nav">
             <button class="nav-btn active" onclick="showSection(1)">1. Intro</button>
             <button class="nav-btn" onclick="showSection(2)">2. Purpose</button>
@@ -92,170 +87,173 @@
 
         <div class="workspace">
             <h2 class="section-title" id="secTitle">1. Greeting & Self-introduction</h2>
-            <textarea id="mainInput" placeholder="Refer to the Fact Sheet and write your script..."></textarea>
+            
+            <div class="exp-box" id="expBox">
+                </div>
+
+            <textarea id="mainInput" placeholder="Write or record your script here..."></textarea>
+            
             <div class="action-btns">
-                <button class="btn-rec" id="recBtn" onclick="toggleRec()">🎤 Record Section</button>
+                <button class="btn-rec" id="recBtn" onclick="toggleRec()">🎤 Start Practice / 錄音練習</button>
                 <button class="btn-speak" onclick="playBack()">🔊 Listen</button>
             </div>
-        </div>
-
-        <div id="expPanel" class="exp-panel">
-            <h3 style="margin-top:0">Quick Reference: Useful Expressions</h3>
-            <div id="expContent"></div>
         </div>
     </div>
 
     <div class="right-col">
         <div class="vocab-bank">
-            <span style="font-weight:bold; font-size:0.9rem">📚 Exam Vocab Bank</span><hr>
-            <div class="v-group">
-                <span class="v-tag v-verb">enrol</span><span class="v-tag v-verb">register</span><span class="v-tag v-verb">sign up</span><span class="v-tag v-verb">visit</span>
-            </div>
-            <div class="v-group">
-                <span class="v-tag v-noun">activities</span><span class="v-tag v-noun">demonstration</span><span class="v-tag v-noun">enquiries</span><span class="v-tag v-noun">families</span><span class="v-tag v-noun">hotline</span><span class="v-tag v-noun">information</span><span class="v-tag v-noun">kit</span><span class="v-tag v-noun">leaflet</span><span class="v-tag v-noun">manager</span><span class="v-tag v-noun">membership</span><span class="v-tag v-noun">organisation</span><span class="v-tag v-noun">participant</span><span class="v-tag v-noun">pop-up store</span><span class="v-tag v-noun">poster</span><span class="v-tag v-noun">practice</span><span class="v-tag v-noun">products</span><span class="v-tag v-noun">purchase</span><span class="v-tag v-noun">reader</span><span class="v-tag v-noun">sales</span><span class="v-tag v-noun">store</span><span class="v-tag v-noun">subjects</span><span class="v-tag v-noun">taster</span><span class="v-tag v-noun">trial</span><span class="v-tag v-noun">website</span>
-            </div>
-            <div class="v-group">
-                <span class="v-tag v-adj">creative</span><span class="v-tag v-adj">different</span><span class="v-tag v-adj">eco-friendly</span><span class="v-tag v-adj">elite</span>
+            <span class="vocab-title">📚 Exam Vocab Bank</span>
+            <div class="vocab-list">
+                <span class="v-tag v-verb">enrol</span><span class="v-tag v-verb">register</span>
+                <span class="v-tag v-verb">sign up</span><span class="v-tag v-verb">visit</span>
+                <span class="v-tag v-noun">activities</span><span class="v-tag v-noun">demonstration</span>
+                <span class="v-tag v-noun">enquiries</span><span class="v-tag v-noun">families</span>
+                <span class="v-tag v-noun">hotline</span><span class="v-tag v-noun">information</span>
+                <span class="v-tag v-noun">kit</span><span class="v-tag v-noun">leaflet</span>
+                <span class="v-tag v-noun">limited (ltd)</span><span class="v-tag v-noun">manager</span>
+                <span class="v-tag v-noun">membership</span><span class="v-tag v-noun">organisation</span>
+                <span class="v-tag v-noun">participant</span><span class="v-tag v-noun">pop-up store</span>
+                <span class="v-tag v-noun">poster</span><span class="v-tag v-noun">practice</span>
+                <span class="v-tag v-noun">products</span><span class="v-tag v-noun">purchase</span>
+                <span class="v-tag v-noun">reader</span><span class="v-tag v-noun">sales</span>
+                <span class="v-tag v-noun">store</span><span class="v-tag v-noun">subjects</span>
+                <span class="v-tag v-noun">taster</span><span class="v-tag v-noun">trial</span>
+                <span class="v-tag v-noun">website</span>
+                <span class="v-tag v-adj">creative</span><span class="v-tag v-adj">different</span>
+                <span class="v-tag v-adj">eco-friendly</span><span class="v-tag v-adj">elite</span>
             </div>
         </div>
+        <p style="font-size: 0.7rem; color: #888; margin-top: 10px;">* Click expressions on the left to copy them to your script.</p>
     </div>
 </div>
 
 <script>
-    let currentTopic = 'A';
     let currentSection = 1;
     let recognition = null;
     let scripts = { 1: "", 2: "", 3: "", 4: "", 5: "", 6: "" };
 
-    const topicData = {
-        'A': {
-            title: "Briefing Session for Wise Learners",
-            purpose: "Introduce new Homework Help App",
-            name: "Wise Learners (Mobile App)",
-            details: "Subjects: English, Maths & Science. Online 1-on-1 practice sessions.",
-            start: "1st September 2026",
-            fee: "Monthly membership: $450",
-            offer: "Enrol within this month -> Get an elite stationery kit",
-            invite: "Trial session on Zoom (this Sat 2pm) -> learn more about the app features",
-            signup: "Register on our official website"
-        },
-        'B': {
-            title: "Briefing Session for Great Book Exchange",
-            purpose: "Introduce new Book Exchange Service",
-            name: "Great Book Exchange",
-            details: "For all readers to swap different books. Promotion of reading culture.",
-            start: "15th August 2026",
-            fee: "Registration fee: $50 (one-off)",
-            offer: "Join today -> Get a limited edition bookmark",
-            invite: "Demonstration at City Library (next Sun) -> learn more about the exchange rules",
-            signup: "Sign up at our pop-up store"
-        },
-        'C': {
-            title: "Briefing Session for Eco Closet",
-            purpose: "Introduce new Recycled Clothing Store",
-            name: "Eco Closet",
-            details: "Sell eco-friendly and creative second-hand clothes for families.",
-            start: "5th July 2026",
-            fee: "Store membership: Free",
-            offer: "Purchase over $300 this week -> Get a recycled tote bag",
-            invite: "Taster session at the shop (Friday night) -> learn more about the store products",
-            signup: "Sign up via our hotline or poster QR code"
-        },
-        'D': {
-            title: "Briefing Session for Best Art Class",
-            purpose: "Introduce new Art Class for Kids",
-            name: "Best Art Class",
-            details: "Painting, sketching, and creative craft activities for children.",
-            start: "20th June 2026",
-            fee: "Course fee: $1200 (8 lessons)",
-            offer: "Sign up this week -> Get a set of professional paint brushes",
-            invite: "Trial class at our centre (tomorrow morning) -> learn more about the course",
-            signup: "Visit our centre manager at the front desk"
-        }
-    };
-
     const sections = {
-        1: { name: "1. Greeting & Self-introduction", exps: ["Good afternoon, everyone. Thank you for coming. I’m [Name], Marketing Manager at [Company].", "Hi everybody! Welcome to today's session. My name is [Name]..."] },
-        2: { name: "2. Purpose of Briefing", exps: ["Today, I’d like to introduce a new [Product] to you.", "Today, I'm going to introduce you to our new [Service]."] },
-        3: { name: "3. Details", exps: ["With effect from [Date], a new [Project] called [Name] will be launched.", "In this [Project], you can [Activity]. The fee is $[Price]. For more information, please visit our website."] },
-        4: { name: "4. Offer", exps: ["If you enrol within this month, we’ll offer you a free [Gift].", "We are pleased to offer you a [Gift] if you sign up today."] },
-        5: { name: "5. Invitation", exps: ["Lastly, I’d like to invite you to our [Event] so that you can learn more about the [Project].", "If you are interested, please sign up at [Location]."] },
-        6: { name: "6. Closing", exps: ["That’s the end of my briefing. Thank you for your time. Are there any questions?", "I’d be glad to answer any questions you might have."] }
-    };
-
-    function setTopic(topic) {
-        if(topic === 'EXPS') {
-            document.getElementById('expPanel').classList.toggle('active');
-            return;
+        1: {
+            title: "1. Greeting & Self-introduction",
+            exps: {
+                "Greeting": ["Good morning, everybody!", "Good afternoon, everybody!", "Hi/Hello, everybody!", "Thank you for coming to this briefing session.", "Thank you for coming today.", "Welcome to today’s briefing session."],
+                "Introduction": ["My name is [Name] and I’m the [Role] at [Company].", "I’m [Name], a [Role] at [Company]."]
+            }
+        },
+        2: {
+            title: "2. Purpose of Briefing",
+            exps: {
+                "Purpose": ["Today, I’m going to introduce you to a new [Product].", "Today, I’d like to introduce a new [Product] to you.", "May I take this opportunity today to introduce a new [Product] to you?"]
+            }
+        },
+        3: {
+            title: "3. Product/Activity Details",
+            exps: {
+                "Timing": ["Starting from [Date], we will have a new [Project] called [Name].", "With effect from [Date], a new [Project] called [Name] will be launched."],
+                "Details": ["In this app / service / store / class, you will [Action].", "The course fee is $[Price]."],
+                "Contact": ["For more details, please visit our website.", "For enquiries, please refer to our leaflet/poster.", "For information, please call our hotline."]
+            }
+        },
+        4: {
+            title: "4. Offer for Target Audience",
+            exps: {
+                "Special Offer": ["If you enrol/sign up/register [Time], we can offer you [Item].", "We would be happy to offer you [Item].", "Our company is pleased to offer you [Item].", "We are willing to offer you a [Item]."]
+            }
+        },
+        5: {
+            title: "5. Invitation",
+            exps: {
+                "Invite": ["You’re invited to [Trial] so that [Benefit].", "Would you like to come to our [Place] to [Action]?", "I'd like to invite you to [Event] to [Action]."]
+            }
+        },
+        6: {
+            title: "6. Closing",
+            exps: {
+                "Close": ["That’s the end of my briefing.", "That’s all for my briefing."],
+                "Thank": ["Thank you for listening.", "Thank you very much for your attention.", "Thank you for your time."],
+                "Questions": ["Do you have any questions? If no, thank you for your time.", "Are there any questions? I’d be pleased to answer them.", "I’d be glad to answer any questions you might have."]
+            }
         }
-        currentTopic = topic;
-        document.querySelectorAll('.topic-btn').forEach(btn => btn.classList.toggle('active', btn.innerText.includes(topic)));
-        updateFactSheet();
-        document.getElementById('expPanel').classList.remove('active');
-    }
-
-    function updateFactSheet() {
-        const d = topicData[currentTopic];
-        document.getElementById('factSheet').innerHTML = `
-            <span class="fact-title">${d.title}</span>
-            <div><strong>Purpose:</strong> Introduce new ${d.purpose}</div>
-            <div><strong>Name:</strong> '${d.name}'</div>
-            <div><strong>Activities/Service:</strong> ${d.details}</div>
-            <div><strong>Starting from:</strong> ${d.start}</div>
-            <div><strong>Fee:</strong> ${d.fee}</div>
-            <div style="margin-top:10px"><strong>Offer:</strong></div>
-            <div>¶ ${d.offer}</div>
-            <div style="margin-top:10px"><strong>Invitation:</strong></div>
-            <div>1. ${d.invite}</div>
-            <div>2. Sign up: ${d.signup}</div>
-        `;
-    }
+    };
 
     function showSection(num) {
+        // Save current text
         scripts[currentSection] = document.getElementById('mainInput').value;
+        
         currentSection = num;
         document.querySelectorAll('.nav-btn').forEach((btn, i) => btn.classList.toggle('active', i+1 === num));
-        document.getElementById('secTitle').innerText = sections[num].name;
+        
+        const data = sections[num];
+        document.getElementById('secTitle').innerText = data.title;
         document.getElementById('mainInput').value = scripts[num];
         
-        let expHtml = sections[num].exps.map(e => `<div class="exp-item" onclick="insertText('${e.replace(/'/g, "\\'")}')">${e}</div>`).join('');
-        document.getElementById('expContent').innerHTML = expHtml;
+        // Build expressions
+        let html = "";
+        for (let group in data.exps) {
+            html += `<span class="exp-group-label">${group}</span>`;
+            data.exps[group].forEach(text => {
+                html += `<div class="exp-item" onclick="insertText('${text.replace(/'/g, "\\'")}')">${text}</div>`;
+            });
+        }
+        document.getElementById('expBox').innerHTML = html;
         if (recognition) stopRec();
     }
 
-    function insertText(t) {
-        document.getElementById('mainInput').value += t;
+    function insertText(text) {
+        const area = document.getElementById('mainInput');
+        area.value += (area.value ? " " : "") + text;
+    }
+
+    function setTopic(topic) {
+        document.querySelectorAll('.topic-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.innerText.startsWith(topic));
+        });
     }
 
     function toggleRec() {
         const btn = document.getElementById('recBtn');
         if (btn.classList.contains('recording')) { stopRec(); return; }
+        
         const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
-        if (!Rec) return alert("Not supported");
+        if (!Rec) return alert("Browser not supported.");
+        
         recognition = new Rec();
         recognition.lang = 'en-US';
         recognition.continuous = true;
+        recognition.interimResults = true;
+        
         btn.classList.add('recording');
-        btn.innerText = "🛑 Stop & Check";
+        btn.innerText = "🛑 Finish / 完成錄音";
+        
         recognition.onresult = (e) => {
-            let t = "";
-            for (let i = e.resultIndex; i < e.results.length; ++i) if (e.results[i].isFinal) t += e.results[i][0].transcript;
-            if (t) document.getElementById('mainInput').value += t;
+            let transcript = "";
+            for (let i = e.resultIndex; i < e.results.length; ++i) {
+                if (e.results[i].isFinal) transcript += e.results[i][0].transcript;
+            }
+            if (transcript) document.getElementById('mainInput').value += transcript;
         };
         recognition.start();
     }
 
-    function stopRec() { if (recognition) recognition.stop(); recognition = null; const btn = document.getElementById('recBtn'); btn.classList.remove('recording'); btn.innerText = "🎤 Record Section"; }
+    function stopRec() {
+        if (recognition) recognition.stop();
+        recognition = null;
+        const btn = document.getElementById('recBtn');
+        btn.classList.remove('recording');
+        btn.innerText = "🎤 Start Practice / 錄音練習";
+    }
 
     function playBack() {
         window.speechSynthesis.cancel();
-        const msg = new SpeechSynthesisUtterance(document.getElementById('mainInput').value);
-        msg.lang = 'en-US'; msg.rate = 0.9;
+        const text = document.getElementById('mainInput').value;
+        if (!text) return;
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.lang = 'en-US';
+        msg.rate = 0.9;
         window.speechSynthesis.speak(msg);
     }
 
-    // Init
-    updateFactSheet();
+    // Init first section
     showSection(1);
 </script>
 
