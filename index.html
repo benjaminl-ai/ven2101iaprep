@@ -19,36 +19,34 @@
         .container { padding: 15px; max-width: 850px; margin: 0 auto; display: none; }
         .container.active { display: block; }
 
-        /* Practice Dashboard Layout */
         .section-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
         .nav-item { padding: 10px; background: #e5e7eb; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.8rem; }
         .nav-item.active { background: var(--primary); color: white; }
 
-        .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .label { font-weight: bold; color: var(--primary); font-size: 0.85rem; margin-bottom: 10px; display: block; }
+        /* Multi-Box Grid */
+        .box-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 20px; }
+        .card { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .box-label { font-weight: bold; color: var(--primary); font-size: 0.9rem; margin-bottom: 10px; display: block; background: #eff6ff; padding: 5px 10px; border-radius: 5px; }
 
-        /* Expression Grid */
-        .exp-pool { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
-        .exp-chip { background: #f1f5f9; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; border: 1px solid #cbd5e1; transition: 0.2s; }
-        .exp-chip:hover { background: #e2e8f0; border-color: var(--primary); }
+        .exp-chip { display: block; background: #f8fafc; padding: 8px 12px; border-radius: 8px; font-size: 0.9rem; cursor: pointer; border: 1px solid #e2e8f0; margin-bottom: 6px; transition: 0.2s; }
+        .exp-chip:hover { border-color: var(--primary); background: #f1f5f9; }
 
-        /* Edit Box */
-        .edit-zone { background: #fff; border: 2px solid var(--primary); border-radius: 10px; padding: 15px; margin-top: 10px; }
-        textarea { width: 100%; height: 70px; border: none; font-size: 1.1rem; font-family: inherit; resize: none; outline: none; margin-bottom: 10px; }
+        /* Floating Practice Area */
+        .practice-zone { position: sticky; bottom: 20px; background: white; border: 3px solid var(--primary); border-radius: 15px; padding: 15px; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 90; }
+        textarea { width: 100%; height: 60px; border: none; font-size: 1.1rem; font-family: inherit; resize: none; outline: none; margin-bottom: 10px; }
         .btn-group { display: flex; gap: 10px; }
         .btn-action { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .btn-listen { background: #f1f5f9; color: #475569; }
         .btn-rec { background: #fee2e2; color: #b91c1c; }
         .btn-rec.recording { background: var(--error); color: white; animation: pulse 1s infinite; }
 
-        /* Vocab KO Game */
+        /* Vocab Game */
         .game-status { background: var(--dark); color: white; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; }
         .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
-        .v-card { background: white; padding: 15px; border-radius: 10px; border: 1px solid #ddd; text-align: center; position: relative; transition: 0.3s; }
+        .v-card { background: white; padding: 15px; border-radius: 10px; border: 1px solid #ddd; text-align: center; position: relative; }
         .v-card.ko { background: #dcfce7; border-color: var(--success); }
         .v-card .ko-stamp { display: none; color: var(--success); font-weight: bold; font-size: 0.7rem; position: absolute; top: 5px; right: 5px; }
         .v-card.ko .ko-stamp { display: block; }
-        .v-btn-rec { margin-top: 10px; width: 100%; padding: 5px; border-radius: 5px; border: 1px solid #ddd; background: #fff; cursor: pointer; font-size: 0.75rem; }
 
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
         #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
@@ -74,14 +72,95 @@
         <button class="nav-item" onclick="showSec(6)">6. Closing</button>
     </div>
 
-    <div class="card">
-        <span class="label">Click to select a phrase:</span>
-        <div id="exp-pool" class="exp-pool"></div>
+    <div id="sec1" class="box-grid sec-content">
+        <div class="card"><span class="box-label">Greeting</span>
+            <div class="exp-chip" onclick="selectExp(this)">Good morning, everybody!</div>
+            <div class="exp-chip" onclick="selectExp(this)">Good afternoon, everybody!</div>
+            <div class="exp-chip" onclick="selectExp(this)">Hi/Hello, everybody!</div>
+        </div>
+        <div class="card"><span class="box-label">Welcome the Audience</span>
+            <div class="exp-chip" onclick="selectExp(this)">Thank you for coming to this briefing session.</div>
+            <div class="exp-chip" onclick="selectExp(this)">Thank you for coming today.</div>
+            <div class="exp-chip" onclick="selectExp(this)">Welcome to today’s briefing session.</div>
+        </div>
+        <div class="card"><span class="box-label">Introduction</span>
+            <div class="exp-chip" onclick="selectExp(this)">My name is [Name] and I’m the [Role] at [Company].</div>
+            <div class="exp-chip" onclick="selectExp(this)">I’m [Name], a [Role] at [Company].</div>
+        </div>
     </div>
 
-    <div class="edit-zone">
-        <span class="label" style="color:var(--primary)">Edit & Practice Box:</span>
-        <textarea id="practice-text" placeholder="Select a phrase above or type here..."></textarea>
+    <div id="sec2" class="box-grid sec-content" style="display:none">
+        <div class="card"><span class="box-label">Topic: Homework Help App</span>
+            <div class="exp-chip" onclick="selectExp(this)">Today, I’m going to introduce you to a new homework help app.</div>
+            <div class="exp-chip" onclick="selectExp(this)">Today, I’d like to introduce a new homework help app to you.</div>
+            <div class="exp-chip" onclick="selectExp(this)">May I take this opportunity today to introduce a new homework help app to you?</div>
+        </div>
+        <div class="card"><span class="box-label">Topic: Book Exchange Service</span>
+            <div class="exp-chip" onclick="selectExp(this)">Today, I’m going to introduce you to a new book exchange service.</div>
+            <div class="exp-chip" onclick="selectExp(this)">Today, I’d like to introduce a new book exchange service to you.</div>
+            <div class="exp-chip" onclick="selectExp(this)">May I take this opportunity today to introduce a new book exchange service to you?</div>
+        </div>
+        <div class="card"><span class="box-label">Topic: Recycled Clothing Store</span>
+            <div class="exp-chip" onclick="selectExp(this)">Today, I’m going to introduce you to a new recycled clothing store.</div>
+            <div class="exp-chip" onclick="selectExp(this)">Today, I’d like to introduce a new recycled clothing store to you.</div>
+            <div class="exp-chip" onclick="selectExp(this)">May I take this opportunity today to introduce a new recycled clothing store to you?</div>
+        </div>
+        <div class="card"><span class="box-label">Topic: Art Class for Kids</span>
+            <div class="exp-chip" onclick="selectExp(this)">Today, I’m going to introduce you to a new art class for kids.</div>
+            <div class="exp-chip" onclick="selectExp(this)">Today, I’d like to introduce a new art class for kids to you.</div>
+            <div class="exp-chip" onclick="selectExp(this)">May I take this opportunity today to introduce a new art class for kids to you?</div>
+        </div>
+    </div>
+
+    <div id="sec3" class="box-grid sec-content" style="display:none">
+        <div class="card"><span class="box-label">1. Starting from...</span>
+            <input type="date" id="dateInput" onchange="updateDateStr()" style="margin-bottom:10px; padding:5px;">
+            <div class="exp-chip" id="date-exp1" onclick="selectExp(this)">Starting from [Date], we will have a new activity.</div>
+            <div class="exp-chip" id="date-exp2" onclick="selectExp(this)">With effect from [Date], a new course will be launched.</div>
+        </div>
+        <div class="card"><span class="box-label">2. Name</span>
+            <div class="exp-chip" onclick="selectExp(this)">The project is called Wise Learners.</div>
+            <div class="exp-chip" onclick="selectExp(this)">We named this service Great Book Exchange.</div>
+            <div class="exp-chip" onclick="selectExp(this)">The new store is called Eco Closet.</div>
+            <div class="exp-chip" onclick="selectExp(this)">This new class is named Best Art Class.</div>
+        </div>
+        <div class="card"><span class="box-label">3. Fee</span>
+            $<input type="number" id="feeInput" value="500" onchange="updateFeeStr()" style="width:80px; margin-bottom:10px;">
+            <div class="exp-chip" id="fee-exp1" onclick="selectExp(this)">The course fee is 500 dollars.</div>
+            <div class="exp-chip" id="fee-exp2" onclick="selectExp(this)">The registration fee is 500 dollars.</div>
+        </div>
+    </div>
+
+    <div id="sec4" class="box-grid sec-content" style="display:none">
+        <div class="card"><span class="box-label">Offer</span>
+            <div class="exp-chip" onclick="selectExp(this)">If you enrol this month, we’ll offer you a free kit.</div>
+            <div class="exp-chip" onclick="selectExp(this)">We would be happy to offer you a special discount.</div>
+        </div>
+    </div>
+    <div id="sec5" class="box-grid sec-content" style="display:none">
+        <div class="card"><span class="box-label">Invitation</span>
+            <div class="exp-chip" onclick="selectExp(this)">I'd like to invite you to a trial class next Friday.</div>
+            <div class="exp-chip" onclick="selectExp(this)">Would you like to come to our demonstration tomorrow?</div>
+        </div>
+    </div>
+
+    <div id="sec6" class="box-grid sec-content" style="display:none">
+        <div class="card"><span class="box-label">Closing</span>
+            <div class="exp-chip" onclick="selectExp(this)">That’s the end of my briefing.</div>
+            <div class="exp-chip" onclick="selectExp(this)">That’s all for my briefing.</div>
+        </div>
+        <div class="card"><span class="box-label">Thank the Audience</span>
+            <div class="exp-chip" onclick="selectExp(this)">Thank you for listening.</div>
+            <div class="exp-chip" onclick="selectExp(this)">Thank you very much for your attention.</div>
+        </div>
+        <div class="card"><span class="box-label">Questions</span>
+            <div class="exp-chip" onclick="selectExp(this)">Do you have any questions?</div>
+            <div class="exp-chip" onclick="selectExp(this)">I’d be glad to answer any questions you might have.</div>
+        </div>
+    </div>
+
+    <div class="practice-zone">
+        <textarea id="practice-text" placeholder="Click any phrase above to edit & practice..."></textarea>
         <div class="btn-group">
             <button class="btn-action btn-listen" onclick="speakText()">🔊 Listen</button>
             <button class="btn-action btn-rec" id="main-rec-btn" onclick="recText()">🎤 Record</button>
@@ -90,62 +169,34 @@
 </div>
 
 <div id="vocab" class="container">
-    <div class="game-status">
-        🏆 <span id="ko-count">0</span> / <span id="total-count">0</span> Words KO'd!
-    </div>
-    
-    <div id="v-verbs-area">
-        <span class="label">Verbs</span>
-        <div class="vocab-grid" id="grid-verbs"></div>
-    </div>
-    <div id="v-nouns-area" style="margin-top:20px">
-        <span class="label">Nouns</span>
-        <div class="vocab-grid" id="grid-nouns"></div>
-    </div>
-    <div id="v-adjs-area" style="margin-top:20px">
-        <span class="label">Adjectives</span>
-        <div class="vocab-grid" id="grid-adjs"></div>
-    </div>
+    <div class="game-status">🏆 KO Count: <span id="ko-count">0</span> / 31</div>
+    <span class="box-label">Verbs</span><div class="vocab-grid" id="grid-v"></div><br>
+    <span class="box-label">Nouns</span><div class="vocab-grid" id="grid-n"></div><br>
+    <span class="box-label">Adjectives</span><div class="vocab-grid" id="grid-a"></div>
 </div>
 
-<div id="modal"><div class="modal-content"><div id="m-icon" style="font-size:3rem"></div><h2 id="m-title"></h2><p id="m-msg"></p><button style="margin-top:15px; padding:10px 20px;" onclick="closeModal()">Close</button></div></div>
+<div id="modal"><div class="modal-content"><div id="m-icon" style="font-size:3rem"></div><h2 id="m-title"></h2><p id="m-msg"></p><button onclick="closeModal()">Close</button></div></div>
 
 <script>
-    const expressions = {
-        1: ["Good morning, everybody!", "Good afternoon, everybody!", "Hi/Hello, everybody!", "Thank you for coming today.", "Welcome to today’s briefing session.", "My name is [Name] and I’m the Manager at [Company]."],
-        2: ["Today, I’m going to introduce you to a new app.", "Today, I’d like to introduce a new book exchange service.", "I'd like to introduce our new recycled clothing store.", "Today, I'll introduce our new art class for kids."],
-        3: ["Starting from 15th July, we will have a new activity.", "With effect from next Monday, a new course will be launched.", "The project is called Wise Learners.", "The course fee is 500 dollars.", "The registration fee is only 50 dollars."],
-        4: ["If you enrol this month, we’ll offer you a free gift.", "We would be happy to offer you a special discount.", "Our company is pleased to offer you a stationery kit."],
-        5: ["I'd like to invite you to a trial class so that you can learn more.", "Would you like to come to our demonstration tomorrow?", "You're invited to our taster session next Friday."],
-        6: ["That’s the end of my briefing.", "Thank you very much for your attention.", "Do you have any questions?", "I’d be glad to answer any questions you might have."]
-    };
-
     const vocabs = {
-        verbs: ["enrol", "register", "sign up", "visit"],
-        nouns: ["activities", "demonstration", "enquiries", "families", "hotline", "information", "kit", "leaflet", "manager", "membership", "organisation", "participant", "pop-up store", "poster", "practice", "products", "purchase", "reader", "sales", "store", "subjects", "taster", "trial", "website"],
-        adjs: ["creative", "different", "eco-friendly", "elite"]
+        v: ["enrol", "register", "sign up", "visit"],
+        n: ["activities", "demonstration", "enquiries", "families", "hotline", "information", "kit", "leaflet", "manager", "membership", "organisation", "participant", "pop-up store", "poster", "practice", "products", "purchase", "reader", "sales", "store", "subjects", "taster", "trial", "website"],
+        a: ["creative", "different", "eco-friendly", "elite"]
     };
 
-    let currentSec = 1;
     let koList = new Set();
 
     function init() {
-        showSec(1);
-        renderVocabGrid('grid-verbs', vocabs.verbs);
-        renderVocabGrid('grid-nouns', vocabs.nouns);
-        renderVocabGrid('grid-adjs', vocabs.adjs);
-        document.getElementById('total-count').innerText = vocabs.verbs.length + vocabs.nouns.length + vocabs.adjs.length;
+        renderVocab('grid-v', vocabs.v);
+        renderVocab('grid-n', vocabs.n);
+        renderVocab('grid-a', vocabs.a);
     }
 
-    function showSec(num) {
-        currentSec = num;
-        document.querySelectorAll('.nav-item').forEach((btn, i) => btn.classList.toggle('active', i+1 === num));
-        const pool = document.getElementById('exp-pool');
-        pool.innerHTML = expressions[num].map(exp => `<div class="exp-chip" onclick="selectExp('${exp}')">${exp}</div>`).join('');
-    }
-
-    function selectExp(text) {
-        document.getElementById('practice-text').value = text;
+    function renderVocab(id, list) {
+        document.getElementById(id).innerHTML = list.map(v => `
+            <div class="v-card" id="v-${v}"><span class="ko-stamp">KO ✅</span><strong>${v}</strong>
+            <button style="width:100%; margin-top:5px;" onclick="vocabPractice(this,'${v}')">🎤 Practice</button></div>
+        `).join('');
     }
 
     function switchTab(id) {
@@ -154,14 +205,30 @@
         event.target.classList.add('active');
     }
 
-    function renderVocabGrid(id, list) {
-        document.getElementById(id).innerHTML = list.map(v => `
-            <div class="v-card" id="card-${v}">
-                <span class="ko-stamp">KO ✅</span>
-                <strong>${v}</strong>
-                <button class="v-btn-rec" onclick="vocabGameRec(this, '${v}')">🎤 Practice</button>
-            </div>
-        `).join('');
+    function showSec(num) {
+        document.querySelectorAll('.sec-content, .nav-item').forEach(el => {
+            if(el.classList.contains('sec-content')) el.style.display = 'none';
+            else el.classList.remove('active');
+        });
+        document.getElementById('sec'+num).style.display = 'grid';
+        event.target.classList.add('active');
+    }
+
+    function selectExp(el) {
+        document.getElementById('practice-text').value = el.innerText;
+    }
+
+    function updateDateStr() {
+        const d = document.getElementById('dateInput').value;
+        const formatted = d ? new Date(d).toLocaleDateString('en-GB', {day:'numeric', month:'long'}) : "[Date]";
+        document.getElementById('date-exp1').innerText = `Starting from ${formatted}, we will have a new activity.`;
+        document.getElementById('date-exp2').innerText = `With effect from ${formatted}, a new course will be launched.`;
+    }
+
+    function updateFeeStr() {
+        const f = document.getElementById('feeInput').value;
+        document.getElementById('fee-exp1').innerText = `The course fee is ${f} dollars.`;
+        document.getElementById('fee-exp2').innerText = `The registration fee is ${f} dollars.`;
     }
 
     function speakText() {
@@ -171,47 +238,36 @@
         window.speechSynthesis.speak(m);
     }
 
-    function recText() {
-        const btn = document.getElementById('main-rec-btn');
-        const target = document.getElementById('practice-text').value;
-        if(!target) return;
-        startSpeechRec(btn, target, false);
-    }
+    function recText() { startSpeech(document.getElementById('main-rec-btn'), document.getElementById('practice-text').value, false); }
+    function vocabPractice(btn, word) { startSpeech(btn, word, true); }
 
-    function vocabGameRec(btn, word) {
-        startSpeechRec(btn, word, true);
-    }
-
-    function startSpeechRec(btn, targetText, isGame) {
-        btn.classList.add('recording');
+    function startSpeech(btn, target, isGame) {
+        btn.innerText = "Listening..."; btn.style.background = "#ef4444";
         const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
         const recognition = new Rec();
         recognition.lang = 'en-US';
         recognition.onresult = (e) => {
             const heard = e.results[0][0].transcript.toLowerCase();
-            const target = targetText.toLowerCase().replace(/[^\w\s]/gi, '');
-            const isMatch = heard.includes(target) || (target.length > 4 && heard.includes(target.substring(0,4)));
-            
+            const isMatch = heard.includes(target.toLowerCase().split(' ')[0]); // Simple match
             if(isGame && isMatch) {
-                document.getElementById('card-' + targetText).classList.add('ko');
-                koList.add(targetText);
+                document.getElementById('v-'+target).classList.add('ko');
+                koList.add(target);
                 document.getElementById('ko-count').innerText = koList.size;
             }
-            showModal(isMatch, heard, targetText);
+            showModal(isMatch, heard, target);
         };
-        recognition.onend = () => btn.classList.remove('recording');
+        recognition.onend = () => { btn.innerText = isGame ? "🎤 Practice" : "🎤 Record"; btn.style.background = ""; };
         recognition.start();
     }
 
     function showModal(isOk, heard, target) {
         document.getElementById('modal').style.display = 'flex';
         document.getElementById('m-icon').innerText = isOk ? "🔥" : "❌";
-        document.getElementById('m-title').innerText = isOk ? "Excellent!" : "Try Again";
-        document.getElementById('m-msg').innerHTML = isOk ? `Perfect pronunciation! <br>"${heard}"` : `I heard: "${heard}"<br>Target: "${target}"`;
+        document.getElementById('m-title').innerText = isOk ? "Great!" : "Try Again";
+        document.getElementById('m-msg').innerHTML = `I heard: "${heard}"`;
     }
 
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
-
     window.onload = init;
 </script>
 </body>
