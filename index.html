@@ -8,7 +8,7 @@
         :root {
             --primary: #2563eb; --bg: #f3f4f6; --white: #ffffff;
             --accent: #f59e0b; --dark: #1f2937; --success: #10b981; --error: #ef4444;
-            --highlight: #facc15; /* 黃色外框顏色 */
+            --highlight: #facc15;
         }
         * { box-sizing: border-box; } 
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--dark); }
@@ -30,12 +30,10 @@
 
         .input-guide { font-weight: bold; color: #666; margin: 10px 0 5px 0; display: block; font-size: 0.8rem; border-left: 3px solid var(--accent); padding-left: 8px; }
 
-        /* 修正後的 Date 框樣式 */
         #det-date { 
             display: inline-block; width: auto; min-width: 180px; padding: 8px 12px; margin: 10px 0; border: 3px solid var(--highlight); border-radius: 8px; background: #fff; font-size: 1rem; cursor: pointer; outline: none;
         }
 
-        /* 修正後的 Fee 框樣式 */
         #det-fee {
             width: 100px; padding: 8px; border: 3px solid var(--highlight); border-radius: 8px; font-size: 1rem; font-weight: bold; outline: none;
         }
@@ -362,17 +360,39 @@
         const target = isGame ? currentWord : document.getElementById('practice-text').value;
         const targetLower = target.toLowerCase().trim();
         let isMatch = false;
-        if (isGame) { isMatch = (lastHeard === targetLower || lastHeard.includes(targetLower)); }
-        else { const firstWord = targetLower.split(' ')[0]; isMatch = lastHeard.includes(firstWord) && lastHeard.length > (targetLower.length * 0.4); }
-        if (isGame && isMatch) { document.getElementById('v-' + target).classList.add('ko'); koList.add(target); updateProgress(); }
+        
+        if (isGame) { 
+            isMatch = (lastHeard === targetLower || lastHeard.includes(targetLower)); 
+        } else { 
+            const firstWord = targetLower.split(' ')[0]; 
+            isMatch = lastHeard.includes(firstWord) && lastHeard.length > (targetLower.length * 0.4); 
+        }
+
+        if (isGame && isMatch) { 
+            document.getElementById('v-' + target).classList.add('ko'); 
+            koList.add(target); 
+            updateProgress(); 
+        }
+        
         showModal(isMatch, lastHeard || "(No sound)", target);
     }
 
+    // --- 核心更新：根據對錯顯示不同 Feedback ---
     function showModal(isOk, heard, target) {
+        const compliments = ["Excellent!", "Well done!", "Perfect!", "Keep it up!", "Great job!", "Spot on!"];
+        const randomEncouragement = compliments[Math.floor(Math.random() * compliments.length)];
+        
         document.getElementById('modal').style.display = 'flex';
         document.getElementById('m-icon').innerText = isOk ? "🔥" : "❌";
         document.getElementById('m-title').innerText = isOk ? "Correct!" : "Try Again";
-        document.getElementById('m-msg').innerHTML = `I heard: "<b>${heard}</b>"<br>Target: "<b>${target}</b>"`;
+        
+        if (isOk) {
+            // 讀對了：只給鼓勵
+            document.getElementById('m-msg').innerHTML = `<b style="font-size: 1.2rem; color: var(--success);">${randomEncouragement}</b>`;
+        } else {
+            // 讀錯了：顯示對比
+            document.getElementById('m-msg').innerHTML = `我聽到: "<b>${heard}</b>"<br>應該是: "<b>${target}</b>"`;
+        }
     }
 
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
