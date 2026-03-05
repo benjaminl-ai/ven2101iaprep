@@ -3,60 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Briefing Master - Modular Practice</title>
+    <title>Briefing Master - Speech Diagnostic</title>
     <style>
         :root {
             --primary: #2563eb; --bg: #f3f4f6; --white: #ffffff;
-            --accent: #f59e0b; --dark: #1f2937; --success: #10b981;
+            --accent: #f59e0b; --dark: #1f2937; --success: #10b981; --error: #ef4444;
         }
         body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--dark); }
-        
         header { background: var(--dark); color: white; padding: 12px; text-align: center; }
         
-        /* Main Tabs */
-        .main-tabs { display: flex; background: white; border-bottom: 1px solid #ddd; }
-        .tab-btn { flex: 1; padding: 15px; border: none; background: none; font-weight: bold; cursor: pointer; color: var(--grey); border-bottom: 3px solid transparent; }
+        /* Tabs */
+        .main-tabs { display: flex; background: white; border-bottom: 1px solid #ddd; position: sticky; top: 0; z-index: 100; }
+        .tab-btn { flex: 1; padding: 15px; border: none; background: none; font-weight: bold; cursor: pointer; color: #6b7280; border-bottom: 3px solid transparent; }
         .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
 
         .container { padding: 15px; max-width: 800px; margin: 0 auto; display: none; }
         .container.active { display: block; }
 
-        /* Sidebar Nav */
         .section-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; margin-bottom: 15px; }
         .nav-item { padding: 10px; background: #e5e7eb; border: none; border-radius: 6px; font-weight: bold; font-size: 0.8rem; cursor: pointer; }
         .nav-item.active { background: var(--primary); color: white; }
 
-        /* Workspace Cards */
-        .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .box-label { font-weight: bold; color: var(--primary); font-size: 0.9rem; margin-bottom: 10px; display: block; background: #eff6ff; padding: 5px 10px; border-radius: 4px; }
+        .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .box-label { font-weight: bold; color: var(--primary); font-size: 0.85rem; margin-bottom: 10px; display: block; border-left: 3px solid var(--primary); padding-left: 8px; }
         
-        .exp-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9; gap: 10px; }
-        .exp-text { font-size: 0.95rem; color: #374151; flex: 1; }
+        .exp-row { display: flex; flex-direction: column; padding: 10px 0; border-bottom: 1px solid #f1f5f9; gap: 8px; }
+        .exp-text { font-size: 0.95rem; color: #374151; line-height: 1.4; }
+        .btn-group { display: flex; gap: 8px; }
         
-        .btn-mini { padding: 5px 12px; border-radius: 15px; border: 1px solid #ddd; background: white; cursor: pointer; font-size: 0.8rem; }
-        .btn-mini:hover { background: #f1f5f9; }
+        .btn-m { padding: 6px 12px; border-radius: 20px; border: 1px solid #ddd; background: white; cursor: pointer; font-size: 0.8rem; display: flex; align-items: center; gap: 4px; }
+        .btn-rec { background: #fee2e2; color: #b91c1c; border-color: #fecaca; }
+        .btn-rec.recording { background: var(--error); color: white; animation: pulse 1s infinite; }
 
-        /* Detail Inputs */
-        .detail-input-group { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-        input[type="date"], input[type="number"], select { padding: 8px; border-radius: 6px; border: 1px solid #ccc; }
+        /* Pop-up Modal */
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; align-items: center; justify-content: center; }
+        .modal-content { background: white; padding: 25px; border-radius: 15px; text-align: center; width: 80%; max-width: 350px; }
+        .status-icon { font-size: 3rem; margin-bottom: 10px; }
+        .btn-close { margin-top: 15px; padding: 10px 20px; background: var(--dark); color: white; border: none; border-radius: 8px; cursor: pointer; }
 
-        /* Vocab Page */
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-        .vocab-item { background: white; padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #e5e7eb; }
-        .vocab-word { font-weight: bold; display: block; margin-bottom: 8px; color: var(--dark); }
-        .v-tag { font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; margin-bottom: 5px; display: inline-block; }
-
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+        /* Vocab Grid */
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+        .vocab-card { background: white; padding: 15px; border-radius: 10px; text-align: center; border: 1px solid #e5e7eb; }
+        
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
     </style>
 </head>
 <body>
 
-<header>
-    <div style="font-weight: bold; font-size: 1.1rem;">VEN1101 Briefing Master</div>
-</header>
+<header><strong>VEN1101 Briefing Master</strong></header>
 
 <div class="main-tabs">
-    <button class="tab-btn active" onclick="switchTab('practice')">Practice Dashboard</button>
+    <button class="tab-btn active" onclick="switchTab('practice')">Dashboard</button>
     <button class="tab-btn" onclick="switchTab('vocab')">Vocab Bank</button>
 </div>
 
@@ -71,65 +68,34 @@
     </div>
 
     <div id="sec1" class="sec-content">
-        <div class="card">
-            <span class="box-label">Greeting</span>
-            <div id="g-list"></div>
-        </div>
-        <div class="card">
-            <span class="box-label">Welcome the Audience</span>
-            <div id="w-list"></div>
-        </div>
-        <div class="card">
-            <span class="box-label">Introduction</span>
-            <div id="i-list"></div>
-        </div>
+        <div class="card"><span class="box-label">Greeting</span><div id="list-g"></div></div>
+        <div class="card"><span class="box-label">Welcome</span><div id="list-w"></div></div>
+        <div class="card"><span class="box-label">Self-Intro</span><div id="list-i"></div></div>
     </div>
 
-    <div id="sec2" class="sec-content" style="display:none">
-        <div id="purpose-boxes"></div>
-    </div>
+    <div id="sec2" class="sec-content" style="display:none"></div>
 
     <div id="sec3" class="sec-content" style="display:none">
         <div class="card">
-            <span class="box-label">1. Starting from (Select Date)</span>
-            <div class="detail-input-group">
-                <input type="date" id="dateInput" value="2026-07-15">
-                <button class="btn-mini" onclick="speakDetail('Starting from ' + formatDate(document.getElementById('dateInput').value))">🔊 Listen</button>
-            </div>
+            <span class="box-label">1. Starting Date</span>
+            <input type="date" id="dateIn" value="2026-07-15" style="margin-bottom:10px; padding:8px;">
+            <div id="list-d"></div>
         </div>
+        <div class="card"><span class="box-label">2. Product Name</span><div id="list-n"></div></div>
         <div class="card">
-            <span class="box-label">2. Topic Name</span>
-            <div id="name-list"></div>
-        </div>
-        <div class="card">
-            <span class="box-label">3. Fee (Set Price)</span>
-            <div class="detail-input-group">
-                <span>$</span><input type="number" id="feeInput" value="100" style="width:80px">
-                <button class="btn-mini" onclick="speakDetail('The fee is ' + document.getElementById('feeInput').value + ' dollars')">🔊 Listen</button>
-            </div>
+            <span class="box-label">3. Fee</span>
+            $<input type="number" id="feeIn" value="720" style="margin-bottom:10px; padding:8px; width:80px;">
+            <div id="list-f"></div>
         </div>
     </div>
 
-    <div id="sec4" class="sec-content" style="display:none">
-        <div class="card"><span class="box-label">Offer Expressions</span><div id="offer-list"></div></div>
-    </div>
-    <div id="sec5" class="sec-content" style="display:none">
-        <div class="card"><span class="box-label">Invitation Expressions</span><div id="invite-list"></div></div>
-    </div>
+    <div id="sec4" class="sec-content" style="display:none"><div class="card"><div id="list-o"></div></div></div>
+    <div id="sec5" class="sec-content" style="display:none"><div class="card"><div id="list-inv"></div></div></div>
 
     <div id="sec6" class="sec-content" style="display:none">
-        <div class="card">
-            <span class="box-label">Closing</span>
-            <div id="c-close"></div>
-        </div>
-        <div class="card">
-            <span class="box-label">Thank the Audience</span>
-            <div id="c-thank"></div>
-        </div>
-        <div class="card">
-            <span class="box-label">Questions</span>
-            <div id="c-q"></div>
-        </div>
+        <div class="card"><span class="box-label">Close Briefing</span><div id="list-c"></div></div>
+        <div class="card"><span class="box-label">Thank Audience</span><div id="list-t"></div></div>
+        <div class="card"><span class="box-label">Invite Questions</span><div id="list-q"></div></div>
     </div>
 </div>
 
@@ -137,126 +103,180 @@
     <div class="vocab-grid" id="vocabGrid"></div>
 </div>
 
+<div id="modal">
+    <div class="modal-content">
+        <div id="m-icon" class="status-icon"></div>
+        <h2 id="m-title"></h2>
+        <p id="m-msg"></p>
+        <button class="btn-close" onclick="closeModal()">Close</button>
+    </div>
+</div>
+
 <script>
-    const data = {
-        greetings: ["Good morning, everybody!", "Good afternoon, everybody!", "Hi/Hello, everybody!"],
-        welcomes: ["Thank you for coming to this briefing session.", "Thank you for coming today.", "Welcome to today’s briefing session."],
-        intros: ["My name is [Name] and I’m the [Role] at [Company].", "I’m [Name], a [Role] at [Company]."],
-        purposes: [
-            { label: "Homework Help App", product: "homework help app" },
-            { label: "Book Exchange Service", product: "book exchange service" },
-            { label: "Recycled Clothing Store", product: "recycled clothing store" },
-            { label: "Art Class for Kids", product: "art class for kids" }
-        ],
-        purposeExps: [
-            "Today, I’m going to introduce you to a new [product].",
-            "Today, I’d like to introduce a new [product] to you.",
-            "May I take this opportunity today to introduce a new [product] to you?"
-        ],
-        names: ["Wise Learners", "Great Book Exchange", "Eco Closet", "Best Art Class"],
-        offers: [
-            "If you enrol for the course this month, we’ll offer you a [gift].",
-            "We would be happy to offer you a [gift].",
-            "Our company is pleased to offer you a [gift]."
-        ],
-        invites: [
-            "You’re invited to our taster session so that you can learn more.",
-            "Would you like to come to our trial class?",
-            "I'd like to invite you to our demonstration."
-        ],
-        closings: ["That’s the end of my briefing.", "That’s all for my briefing."],
-        thanks: ["Thank you for listening.", "Thank you very much for your attention.", "Thank you for your time."],
-        questions: ["Do you have any questions?", "Are there any questions? I’d be pleased to answer them.", "I’d be glad to answer any questions you might have."]
+    let recognition = null;
+    let isRecording = false;
+
+    const speechData = {
+        g: ["Good morning, everybody!", "Good afternoon, everybody!", "Hi/Hello, everybody!"],
+        w: ["Thank you for coming to this briefing session.", "Thank you for coming today.", "Welcome to today’s briefing session."],
+        i: ["My name is Danny and I’m the Manager at Everyday Fitness.", "I’m Danny, a Marketing Officer at Everyday Fitness."],
+        purp_topics: ["homework help app", "book exchange service", "recycled clothing store", "art class for kids"],
+        purp_exps: ["Today, I’m going to introduce you to a new [p].", "Today, I’d like to introduce a new [p] to you.", "May I take this opportunity today to introduce a new [p] to you?"],
+        details: {
+            d: ["Starting from [v], we will have a new activity.", "With effect from [v], a new course will be launched."],
+            n: ["The new project is called Wise Learners.", "We named this service Great Book Exchange.", "The new store is called Eco Closet.", "This new class is named Best Art Class."],
+            f: ["The course fee is [v] dollars.", "The registration fee is [v] dollars."]
+        },
+        o: ["If you enrol this month, we’ll offer you a free kit.", "We would be happy to offer you a discount.", "Our company is pleased to offer you a gift."],
+        inv: ["I'd like to invite you to a trial class so that you can learn more.", "Would you like to come to our demonstration?", "You're invited to our taster session next Friday."],
+        c: ["That’s the end of my briefing.", "That’s all for my briefing."],
+        t: ["Thank you for listening.", "Thank you very much for your attention.", "Thank you for your time."],
+        q: ["Do you have any questions?", "Are there any questions? I’d be pleased to answer them.", "I’d be glad to answer any questions you might have."]
     };
 
-    const vocabs = [
-        {w: "enrol", t: "v"}, {w: "register", t: "v"}, {w: "sign up", t: "v"}, {w: "visit", t: "v"},
-        {w: "activities", t: "n"}, {w: "demonstration", t: "n"}, {w: "enquiries", t: "n"}, {w: "families", t: "n"},
-        {w: "hotline", t: "n"}, {w: "information", t: "n"}, {w: "kit", t: "n"}, {w: "leaflet", t: "n"},
-        {w: "limited (ltd)", t: "n"}, {w: "manager", t: "n"}, {w: "membership", t: "n"}, {w: "organisation", t: "n"},
-        {w: "participant", t: "n"}, {w: "pop-up store", t: "n"}, {w: "poster", t: "n"}, {w: "practice", t: "n"},
-        {w: "products", t: "n"}, {w: "purchase", t: "n"}, {w: "reader", t: "n"}, {w: "sales", t: "n"},
-        {w: "store", t: "n"}, {w: "subjects", t: "n"}, {w: "taster", t: "n"}, {w: "trial", t: "n"}, {w: "website", t: "n"},
-        {w: "creative", t: "adj"}, {w: "different", t: "adj"}, {w: "eco-friendly", t: "adj"}, {w: "elite", t: "adj"}
-    ];
+    const vocabs = ["enrol", "register", "sign up", "visit", "activities", "demonstration", "enquiries", "families", "hotline", "information", "kit", "leaflet", "manager", "membership", "organisation", "participant", "pop-up store", "poster", "practice", "products", "purchase", "reader", "sales", "store", "subjects", "taster", "trial", "website", "creative", "different", "eco-friendly", "elite"];
 
     function switchTab(id) {
-        document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.container, .tab-btn').forEach(el => el.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         event.target.classList.add('active');
     }
 
     function showSec(num) {
-        document.querySelectorAll('.sec-content').forEach(s => s.style.display = 'none');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.getElementById('sec' + num).style.display = 'block';
+        document.querySelectorAll('.sec-content, .nav-item').forEach(el => {
+            if(el.classList.contains('sec-content')) el.style.display = 'none';
+            else el.classList.remove('active');
+        });
+        document.getElementById('sec'+num).style.display = 'block';
         event.target.classList.add('active');
     }
 
-    function renderList(targetId, list) {
-        const container = document.getElementById(targetId);
-        container.innerHTML = list.map(text => `
-            <div class="exp-row">
-                <span class="exp-text">${text}</span>
-                <button class="btn-mini" onclick="speakDetail('${text.replace(/'/g, "\\'")}')">🔊</button>
+    function createRow(text, targetId) {
+        const div = document.createElement('div');
+        div.className = 'exp-row';
+        div.innerHTML = `
+            <span class="exp-text">${text}</span>
+            <div class="btn-group">
+                <button class="btn-m" onclick="speak('${text}')">🔊 Listen</button>
+                <button class="btn-m btn-rec" onclick="startPractice(this, '${text}')">🎤 Record</button>
             </div>
-        `).join('');
+        `;
+        document.getElementById(targetId).appendChild(div);
     }
 
-    function renderPurpose() {
-        const container = document.getElementById('purpose-boxes');
-        container.innerHTML = data.purposes.map(p => `
-            <div class="card">
-                <span class="box-label">${p.label}</span>
-                ${data.purposeExps.map(exp => {
-                    const fullText = exp.replace('[product]', p.product);
-                    return `<div class="exp-row">
-                        <span class="exp-text">${fullText}</span>
-                        <button class="btn-mini" onclick="speakDetail('${fullText.replace(/'/g, "\\'")}')">🔊</button>
-                    </div>`;
-                }).join('')}
-            </div>
-        `).join('');
+    function init() {
+        // Render simple lists
+        speechData.g.forEach(t => createRow(t, 'list-g'));
+        speechData.w.forEach(t => createRow(t, 'list-w'));
+        speechData.i.forEach(t => createRow(t, 'list-i'));
+        speechData.o.forEach(t => createRow(t, 'list-o'));
+        speechData.inv.forEach(t => createRow(t, 'list-inv'));
+        speechData.c.forEach(t => createRow(t, 'list-c'));
+        speechData.t.forEach(t => createRow(t, 'list-t'));
+        speechData.q.forEach(t => createRow(t, 'list-q'));
+
+        // Render Purpose (4 boxes)
+        const pSec = document.getElementById('sec2');
+        speechData.purp_topics.forEach(topic => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `<span class="box-label">${topic.toUpperCase()}</span>`;
+            speechData.purp_exps.forEach(exp => {
+                const full = exp.replace('[p]', topic);
+                const row = document.createElement('div');
+                row.className = 'exp-row';
+                row.innerHTML = `<span class="exp-text">${full}</span><div class="btn-group">
+                    <button class="btn-m" onclick="speak('${full}')">🔊</button>
+                    <button class="btn-m btn-rec" onclick="startPractice(this, '${full}')">🎤</button></div>`;
+                card.appendChild(row);
+            });
+            pSec.appendChild(card);
+        });
+
+        // Render Details with variable logic
+        speechData.details.d.forEach(t => createDetailRow(t, 'list-d', 'dateIn'));
+        speechData.details.n.forEach(t => createRow(t, 'list-n'));
+        speechData.details.f.forEach(t => createDetailRow(t, 'list-f', 'feeIn'));
+
+        // Render Vocab
+        const vGrid = document.getElementById('vocabGrid');
+        vocabs.forEach(v => {
+            const vCard = document.createElement('div');
+            vCard.className = 'vocab-card';
+            vCard.innerHTML = `<strong>${v}</strong><br><br>
+                <button class="btn-m" style="width:100%;margin-bottom:5px" onclick="speak('${v}')">🔊 Listen</button>
+                <button class="btn-m btn-rec" style="width:100%" onclick="startPractice(this, '${v}')">🎤 Record</button>`;
+            vGrid.appendChild(vCard);
+        });
     }
 
-    function speakDetail(text) {
+    function createDetailRow(template, targetId, inputId) {
+        const div = document.createElement('div');
+        div.className = 'exp-row';
+        const getFull = () => {
+            let val = document.getElementById(inputId).value;
+            if(inputId === 'dateIn') val = new Date(val).toLocaleDateString('en-US', {day:'numeric', month:'long'});
+            return template.replace('[v]', val);
+        };
+        div.innerHTML = `<span class="exp-text">${template.replace('[v]', '...')}</span>
+            <div class="btn-group">
+                <button class="btn-m" onclick="speak(getFull())">🔊 Listen</button>
+                <button class="btn-m btn-rec" onclick="startPractice(this, getFull())">🎤 Record</button>
+            </div>`;
+        document.getElementById(targetId).appendChild(div);
+    }
+
+    function speak(t) {
         window.speechSynthesis.cancel();
-        const msg = new SpeechSynthesisUtterance(text);
-        msg.lang = 'en-US'; msg.rate = 0.85;
-        window.speechSynthesis.speak(msg);
+        const m = new SpeechSynthesisUtterance(t);
+        m.lang = 'en-US'; m.rate = 0.85;
+        window.speechSynthesis.speak(m);
     }
 
-    function formatDate(dateStr) {
-        if(!dateStr) return "";
-        const date = new Date(dateStr);
-        return date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
+    function startPractice(btn, targetText) {
+        if(isRecording) return;
+        isRecording = true;
+        btn.classList.add('recording');
+        btn.innerText = "🛑 Listening...";
+
+        const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
+        recognition = new Rec();
+        recognition.lang = 'en-US';
+        
+        recognition.onresult = (e) => {
+            const heard = e.results[0][0].transcript.toLowerCase().replace(/[^\w\s]/gi, '');
+            const target = targetText.toLowerCase().replace(/[^\w\s]/gi, '');
+            
+            // Logic: check if major keywords exist
+            const targetWords = target.split(' ').filter(w => w.length > 3);
+            const matches = targetWords.filter(w => heard.includes(w));
+            const score = targetWords.length > 0 ? matches.length / targetWords.length : 1;
+
+            showModal(score >= 0.7, heard, targetText);
+        };
+
+        recognition.onend = () => {
+            btn.classList.remove('recording');
+            btn.innerText = "🎤 Record";
+            isRecording = false;
+        };
+        recognition.start();
     }
 
-    // Init Logic
-    renderList('g-list', data.greetings);
-    renderList('w-list', data.welcomes);
-    renderList('i-list', data.intros);
-    renderPurpose();
-    renderList('name-list', data.names);
-    renderList('offer-list', data.offers);
-    renderList('invite-list', data.invites);
-    renderList('c-close', data.closings);
-    renderList('c-thank', data.thanks);
-    renderList('c-q', data.questions);
+    function showModal(isOk, heard, target) {
+        const modal = document.getElementById('modal');
+        document.getElementById('m-icon').innerText = isOk ? "🌟" : "❌";
+        document.getElementById('m-title').innerText = isOk ? "Perfect!" : "Try Again";
+        document.getElementById('m-title').style.color = isOk ? "var(--success)" : "var(--error)";
+        document.getElementById('m-msg').innerHTML = isOk 
+            ? `Excellent pronunciation!<br><small>"${heard}"</small>` 
+            : `I heard: "${heard}"<br>Expected: "${target}"`;
+        modal.style.display = 'flex';
+    }
 
-    // Vocab Grid
-    document.getElementById('vocabGrid').innerHTML = vocabs.map(v => `
-        <div class="vocab-item">
-            <span class="v-tag ${v.t === 'v' ? 'v-verb' : v.t === 'n' ? 'v-noun' : 'v-adj'}" 
-                  style="background:${v.t==='v'?'#dcfce7':v.t==='n'?'#dbeafe':'#fef9c3'}">
-                ${v.t.toUpperCase()}
-            </span>
-            <span class="vocab-word">${v.w}</span>
-            <button class="btn-mini" onclick="speakDetail('${v.w}')">🔊 Listen</button>
-        </div>
-    `).join('');
+    function closeModal() { document.getElementById('modal').style.display = 'none'; }
 
+    window.onload = init;
 </script>
 </body>
 </html>
