@@ -27,10 +27,8 @@
         .card { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 15px; }
         .box-label { font-weight: bold; color: var(--primary); font-size: 0.85rem; margin-bottom: 10px; display: block; background: #eff6ff; padding: 5px 10px; border-radius: 5px; }
 
-        /* 移除黃色框，改為純引導文字 */
         .input-guide { font-weight: bold; color: #666; margin: 10px 0 5px 0; display: block; font-size: 0.8rem; border-left: 3px solid var(--accent); padding-left: 8px; }
 
-        /* 加強可選句子的視覺效果 */
         .exp-chip { display: block; background: #ffffff; padding: 12px; border-radius: 8px; font-size: 0.95rem; cursor: pointer; border: 2px solid #e2e8f0; margin-bottom: 8px; transition: 0.2s; }
         .exp-chip:hover { border-color: var(--primary); background: #f8fafc; }
         .exp-chip:active { transform: scale(0.98); }
@@ -40,8 +38,19 @@
         .btn-group { display: flex; gap: 10px; }
         .btn-action { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .btn-listen { background: #f1f5f9; color: #475569; }
+        
+        /* 錄音按鈕閃爍效果 */
         .btn-rec { background: #fee2e2; color: #b91c1c; transition: all 0.3s; }
-        .btn-rec.active { background: var(--error); color: white; }
+        .btn-rec.active { 
+            background: var(--error); 
+            color: white; 
+            animation: pulse-red 1.5s infinite; 
+        }
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); opacity: 1; }
+        }
 
         .progress-container { background: #e5e7eb; border-radius: 20px; height: 12px; margin-bottom: 15px; overflow: hidden; }
         .progress-bar { background: var(--success); height: 100%; width: 0%; transition: width 0.5s ease; }
@@ -246,7 +255,7 @@
     }
 
     function closePractice() {
-        stopSpeech();
+        if(isRecording) stopSpeech();
         document.getElementById('v-practice-window').style.display = 'none';
         currentWord = "";
     }
@@ -318,28 +327,38 @@
 
     function startSpeech(btn, target, isGame) {
         if (!target) return;
-        if (recognition) recognition.abort(); // 強制中止上一次，解決無反應問題
+        
+        // 1. 先清除舊的狀態
+        if (recognition) {
+            recognition.abort();
+        }
+
+        const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
+        if (!Rec) {
+            alert("Speech recognition is not supported in this browser.");
+            return;
+        }
 
         isRecording = true;
         btn.classList.add('active');
         btn.innerText = "🛑 Stop";
 
-        const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
         recognition = new Rec();
         recognition.lang = 'en-US';
         recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
 
+        // 2. 設定辨識結果處理
         recognition.onresult = (e) => {
             const heard = e.results[0][0].transcript.toLowerCase().trim();
             const targetWord = target.toLowerCase().trim();
             
-            // 提高準繩度：
-            // 如果是 Game，必須精準包含單字
-            // 如果是句子，辨識結果與目標的重疊率需達 80%
             let isMatch = false;
             if (isGame) {
+                // 單字辨識：完全相同或包含該字
                 isMatch = (heard === targetWord || heard.includes(targetWord));
             } else {
+                // 句子辨識：包含第一個關鍵字 (起始位)
                 isMatch = heard.includes(targetWord.split(' ')[0]);
             }
 
@@ -349,15 +368,35 @@
                 updateProgress();
             }
             showModal(isMatch, heard, target);
+            stopSpeech(); // 成功後自動停止
         };
 
-        recognition.onerror = () => stopSpeech();
-        recognition.onend = () => { if(isRecording) stopSpeech(); };
-        recognition.start();
+        // 3. 錯誤處理
+        recognition.onerror = (event) => {
+            console.error("Speech Recognition Error:", event.error);
+            stopSpeech();
+        };
+
+        // 4. 當錄音自然結束
+        recognition.onend = () => {
+            if (isRecording) stopSpeech();
+        };
+
+        try {
+            recognition.start();
+        } catch (err) {
+            console.error("Failed to start recognition:", err);
+            stopSpeech();
+        }
     }
 
     function stopSpeech() {
-        if (recognition) recognition.abort();
+        if (recognition) {
+            recognition.onresult = null;
+            recognition.onerror = null;
+            recognition.onend = null;
+            recognition.abort();
+        }
         isRecording = false;
         document.querySelectorAll('.btn-rec').forEach(b => {
             b.classList.remove('active');
