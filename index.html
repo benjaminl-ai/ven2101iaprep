@@ -8,6 +8,7 @@
         :root {
             --primary: #2563eb; --bg: #f3f4f6; --white: #ffffff;
             --accent: #f59e0b; --dark: #1f2937; --success: #10b981; --error: #ef4444;
+            --highlight: #facc15; /* 黃色外框顏色 */
         }
         * { box-sizing: border-box; } 
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--dark); }
@@ -29,9 +30,14 @@
 
         .input-guide { font-weight: bold; color: #666; margin: 10px 0 5px 0; display: block; font-size: 0.8rem; border-left: 3px solid var(--accent); padding-left: 8px; }
 
-        /* 加大 Date Input 樣式 */
+        /* 修正後的 Date 框樣式 */
         #det-date { 
-            display: block; width: 100%; padding: 12px; margin: 10px 0; border: 2px solid var(--primary); border-radius: 8px; background: #fff; font-size: 1.1rem; cursor: pointer;
+            display: inline-block; width: auto; min-width: 180px; padding: 8px 12px; margin: 10px 0; border: 3px solid var(--highlight); border-radius: 8px; background: #fff; font-size: 1rem; cursor: pointer; outline: none;
+        }
+
+        /* 修正後的 Fee 框樣式 */
+        #det-fee {
+            width: 100px; padding: 8px; border: 3px solid var(--highlight); border-radius: 8px; font-size: 1rem; font-weight: bold; outline: none;
         }
 
         .exp-chip { display: block; background: #ffffff; padding: 12px; border-radius: 8px; font-size: 0.95rem; cursor: pointer; border: 2px solid #e2e8f0; margin-bottom: 8px; transition: 0.2s; }
@@ -124,16 +130,15 @@
             <div class="exp-chip" id="sent-ac" onclick="selectExp(this)">Starting from [Date], we’ll have a new class called '<u><b>Best Art Class</b></u>'.</div>
         </div>
         <div class="card"><span class="box-label">2. Fee</span>
-            <span class="input-guide">Enter Fee: $<input type="number" id="det-fee" value="500" onchange="updateDetailSentences()" style="width: 80px; padding: 5px;"></span>
-            <div class="exp-chip" id="sent-fee" onclick="selectExp(this)">The fee is 500 dollars.</div>
+            <span class="input-guide">Enter Fee ($):</span>
+            <input type="number" id="det-fee" value="500" onchange="updateDetailSentences()">
+            <div class="exp-chip" id="sent-fee" onclick="selectExp(this)" style="margin-top:10px;">The fee is 500 dollars.</div>
         </div>
         <div class="card"><span class="box-label">3. Enquiries</span>
-            <span class="input-guide">Choose Heading:</span>
-            <div class="exp-chip" onclick="selectInfo('header', this)">For enquiries,</div>
-            <div class="exp-chip" onclick="selectInfo('header', this)">For more enquiries,</div>
-            <div class="exp-chip" onclick="selectInfo('header', this)">For details,</div>
-            <div class="exp-chip" onclick="selectInfo('header', this)">For more details,</div>
+            <span class="input-guide">Choose Type:</span>
             <div class="exp-chip" onclick="selectInfo('header', this)">For more information,</div>
+            <div class="exp-chip" onclick="selectInfo('header', this)">For more details,</div>
+            <div class="exp-chip" onclick="selectInfo('header', this)">For enquiries,</div>
             
             <span class="input-guide">Choose Action:</span>
             <div class="exp-chip" onclick="selectInfo('action', this)">please call our hotline.</div>
