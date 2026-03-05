@@ -47,10 +47,27 @@
         .game-status { background: var(--dark); color: white; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
         
         .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
-        .v-card { background: white; padding: 20px 10px; border-radius: 10px; border: 1px solid #ddd; text-align: center; cursor: pointer; transition: 0.2s; position: relative; font-weight: bold; }
+        .v-card { 
+            background: white; 
+            padding: 25px 5px; /* 增加上下間距 */
+            border-radius: 10px; 
+            border: 1px solid #ddd; 
+            text-align: center; 
+            cursor: pointer; 
+            transition: 0.2s; 
+            position: relative; 
+            font-weight: bold;
+            font-size: 0.85rem;
+            word-wrap: break-word; /* 防止長單字溢出 */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 70px;
+        }
         .v-card.ko { background: var(--success); color: white; border-color: #059669; }
-        .v-card .ko-stamp { display: none; position: absolute; top: 2px; right: 5px; font-size: 0.7rem; }
-        .v-card.ko .ko-stamp { display: block; }
+        .v-card .tick-stamp { display: none; position: absolute; top: 4px; right: 6px; font-size: 0.8rem; }
+        .v-card.ko .tick-stamp { display: block; }
 
         /* Floating Window for Practice */
         #v-practice-window { display: none; position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 400px; background: white; border: 4px solid var(--accent); border-radius: 20px; padding: 20px; z-index: 3000; box-shadow: 0 10px 40px rgba(0,0,0,0.3); text-align: center; animation: slideUp 0.3s ease-out; }
@@ -189,7 +206,7 @@
     <div class="progress-container"><div class="progress-bar" id="v-progress"></div></div>
     <div class="game-status">
         <span>🏆 <b>Mastery Progress</b></span>
-        <span><b id="ko-count">0</b> / 32 KO</span>
+        <span><b id="ko-count">0</b> / 32 ✅</span>
     </div>
     
     <span class="box-label">Verbs</span><div class="vocab-grid" id="grid-v"></div><br>
@@ -227,7 +244,6 @@
     let isRecording = false;
 
     function init() {
-        // 載入 localStorage 進度
         const saved = localStorage.getItem('vocab_ko_list');
         if (saved) koList = new Set(JSON.parse(saved));
 
@@ -240,18 +256,17 @@
     function renderVocab(id, list) {
         document.getElementById(id).innerHTML = list.map(v => `
             <div class="v-card ${koList.has(v) ? 'ko' : ''}" id="v-${v}" onclick="openPractice('${v}')">
-                <span class="ko-stamp">KO ✅</span>
+                <span class="tick-stamp">✅</span>
                 ${v}
             </div>
         `).join('');
     }
 
-    // --- Vocab Practice Logic ---
     function openPractice(word) {
         currentWord = word;
         document.getElementById('v-active-word').innerText = word;
         document.getElementById('v-practice-window').style.display = 'block';
-        speak(word);
+        // 移除 speak(word); 點擊不再自動播放
     }
 
     function closePractice() {
@@ -268,7 +283,6 @@
         localStorage.setItem('vocab_ko_list', JSON.stringify(Array.from(koList)));
     }
 
-    // --- Tab & Section UI ---
     function switchTab(id) {
         document.querySelectorAll('.container, .tab-btn').forEach(el => el.classList.remove('active'));
         document.getElementById(id).classList.add('active');
@@ -285,7 +299,6 @@
         event.target.classList.add('active');
     }
 
-    // --- Expression Logic (Combo) ---
     function selectExp(el) { document.getElementById('practice-text').value = el.innerText; }
     function selectPurpose(type, el) { combos.purpose[type] = el.innerText; updateText('purpose'); }
     function selectInfo(type, el) { combos.info[type] = el.innerText; updateText('info'); }
@@ -311,7 +324,6 @@
         document.getElementById('sent-fee').innerText = `The course fee is ${f} dollars.`;
     }
 
-    // --- Speech Logic ---
     function speak(t) {
         window.speechSynthesis.cancel();
         const m = new SpeechSynthesisUtterance(t);
@@ -331,6 +343,12 @@
 
     function startSpeech(btn, target, isGame) {
         if (!target) return;
+        
+        // 確保先關閉之前的錄音物件
+        if (recognition) {
+            recognition.abort();
+        }
+
         isRecording = true;
         btn.classList.add('active');
         btn.innerText = "🛑 Stop";
@@ -338,25 +356,44 @@
         const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
         recognition = new Rec();
         recognition.lang = 'en-US';
+        recognition.continuous = false;
+        recognition.interimResults = false;
         
         recognition.onresult = (e) => {
             const heard = e.results[0][0].transcript.toLowerCase();
+            // 比較邏輯：比對目標單字是否存在於辨識結果中
             const isMatch = heard.includes(target.toLowerCase().split(' ')[0]);
+            
             if(isGame && isMatch) {
                 document.getElementById('v-'+target).classList.add('ko');
                 koList.add(target);
                 updateProgress();
             }
             showModal(isMatch, heard, target);
+        };
+
+        recognition.onerror = (e) => {
+            console.error("Recognition Error:", e.error);
             stopSpeech();
         };
 
-        recognition.onend = () => { if (isRecording) stopSpeech(); };
-        recognition.start();
+        recognition.onend = () => { 
+            stopSpeech(); 
+        };
+
+        try {
+            recognition.start();
+        } catch (err) {
+            console.error("Start Error:", err);
+            stopSpeech();
+        }
     }
 
     function stopSpeech() {
-        if (recognition) recognition.stop();
+        if (recognition) {
+            recognition.onend = null; // 避免觸發重複調用
+            recognition.stop();
+        }
         isRecording = false;
         document.getElementById('main-rec-btn').classList.remove('active');
         document.getElementById('main-rec-btn').innerText = "🎤 Start Recording";
