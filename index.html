@@ -9,58 +9,59 @@
             --primary: #2563eb; --bg: #f3f4f6; --white: #ffffff;
             --accent: #f59e0b; --dark: #1f2937; --success: #10b981; --error: #ef4444;
         }
-        body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--dark); }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--dark); }
         header { background: var(--dark); color: white; padding: 15px; text-align: center; border-bottom: 4px solid var(--primary); }
         
         .main-tabs { display: flex; background: white; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .tab-btn { flex: 1; padding: 15px; border: none; background: none; font-weight: bold; cursor: pointer; color: #6b7280; border-bottom: 3px solid transparent; }
         .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
 
-        .container { padding: 15px; max-width: 800px; margin: 0 auto; display: none; }
+        .container { padding: 15px; max-width: 850px; margin: 0 auto; display: none; }
         .container.active { display: block; }
 
-        .section-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 20px; }
-        .nav-item { padding: 12px; background: #e5e7eb; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.85rem; }
+        /* Practice Dashboard Layout */
+        .section-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
+        .nav-item { padding: 10px; background: #e5e7eb; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.8rem; }
         .nav-item.active { background: var(--primary); color: white; }
 
-        .card { background: white; border-radius: 15px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
-        .box-label { font-weight: bold; color: var(--primary); font-size: 0.9rem; margin-bottom: 12px; display: block; }
-        
-        select { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #e2e8f0; font-size: 1rem; margin-bottom: 15px; background: #f8fafc; }
-        
-        .practice-zone { background: #f1f5f9; padding: 15px; border-radius: 10px; text-align: center; min-height: 60px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; font-weight: 500; color: #1e293b; margin-bottom: 15px; border: 1px solid #cbd5e1; }
-        
+        .card { background: white; border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .label { font-weight: bold; color: var(--primary); font-size: 0.85rem; margin-bottom: 10px; display: block; }
+
+        /* Expression Grid */
+        .exp-pool { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+        .exp-chip { background: #f1f5f9; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; cursor: pointer; border: 1px solid #cbd5e1; transition: 0.2s; }
+        .exp-chip:hover { background: #e2e8f0; border-color: var(--primary); }
+
+        /* Edit Box */
+        .edit-zone { background: #fff; border: 2px solid var(--primary); border-radius: 10px; padding: 15px; margin-top: 10px; }
+        textarea { width: 100%; height: 70px; border: none; font-size: 1.1rem; font-family: inherit; resize: none; outline: none; margin-bottom: 10px; }
         .btn-group { display: flex; gap: 10px; }
-        .btn-m { flex: 1; padding: 12px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; font-size: 1rem; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-listen { background: #e2e8f0; color: #475569; }
+        .btn-action { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
+        .btn-listen { background: #f1f5f9; color: #475569; }
         .btn-rec { background: #fee2e2; color: #b91c1c; }
         .btn-rec.recording { background: var(--error); color: white; animation: pulse 1s infinite; }
 
-        /* Vocab Styles */
-        .vocab-section { margin-bottom: 25px; }
-        .vocab-type-label { font-size: 0.8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 10px; display: block; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
-        .v-card { background: white; padding: 10px; border-radius: 8px; border: 1px solid #e2e8f0; text-align: center; }
-        .v-card strong { display: block; margin-bottom: 8px; font-size: 1rem; }
+        /* Vocab KO Game */
+        .game-status { background: var(--dark); color: white; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+        .v-card { background: white; padding: 15px; border-radius: 10px; border: 1px solid #ddd; text-align: center; position: relative; transition: 0.3s; }
+        .v-card.ko { background: #dcfce7; border-color: var(--success); }
+        .v-card .ko-stamp { display: none; color: var(--success); font-weight: bold; font-size: 0.7rem; position: absolute; top: 5px; right: 5px; }
+        .v-card.ko .ko-stamp { display: block; }
+        .v-btn-rec { margin-top: 10px; width: 100%; padding: 5px; border-radius: 5px; border: 1px solid #ddd; background: #fff; cursor: pointer; font-size: 0.75rem; }
 
-        /* Modal */
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
         #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 20px; text-align: center; width: 85%; max-width: 400px; }
-        .btn-close { margin-top: 20px; padding: 12px 25px; background: var(--dark); color: white; border: none; border-radius: 10px; cursor: pointer; width: 100%; }
-
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+        .modal-content { background: white; padding: 25px; border-radius: 20px; text-align: center; width: 80%; max-width: 350px; }
     </style>
 </head>
 <body>
 
-<header>
-    <div style="font-size: 0.8rem; opacity: 0.8; margin-bottom: 4px;">Vocational English Prep</div>
-    <strong>VEN2101 IA Prep Task Helper</strong>
-</header>
+<header><strong>VEN2101 IA Prep Task Helper</strong></header>
 
 <div class="main-tabs">
-    <button class="tab-btn active" onclick="switchTab('practice')">Practice</button>
-    <button class="tab-btn" onclick="switchTab('vocab')">Vocab Bank</button>
+    <button class="tab-btn active" onclick="switchTab('practice')">Speech Prep</button>
+    <button class="tab-btn" onclick="switchTab('vocab')">Vocab Game</button>
 </div>
 
 <div id="practice" class="container active">
@@ -73,75 +74,50 @@
         <button class="nav-item" onclick="showSec(6)">6. Closing</button>
     </div>
 
-    <div id="sec1" class="sec-content">
-        <div class="card"><span class="box-label">Step 1: Greeting</span><select id="sel-g" onchange="updateZone('g')"></select><div class="practice-zone" id="zone-g">--- Select to Start ---</div><div class="btn-group"><button class="btn-m btn-listen" onclick="handleSpeak('g')">🔊 Listen</button><button class="btn-m btn-rec" onclick="handleRec('g')">🎤 Record</button></div></div>
-        <div class="card"><span class="box-label">Step 2: Welcome Audience</span><select id="sel-w" onchange="updateZone('w')"></select><div class="practice-zone" id="zone-w">--- Select to Start ---</div><div class="btn-group"><button class="btn-m btn-listen" onclick="handleSpeak('w')">🔊 Listen</button><button class="btn-m btn-rec" onclick="handleRec('w')">🎤 Record</button></div></div>
-        <div class="card"><span class="box-label">Step 3: Self-Introduction</span><select id="sel-i" onchange="updateZone('i')"></select><div class="practice-zone" id="zone-i">--- Select to Start ---</div><div class="btn-group"><button class="btn-m btn-listen" onclick="handleSpeak('i')">🔊 Listen</button><button class="btn-m btn-rec" onclick="handleRec('i')">🎤 Record</button></div></div>
+    <div class="card">
+        <span class="label">Click to select a phrase:</span>
+        <div id="exp-pool" class="exp-pool"></div>
     </div>
 
-    <div id="sec2" class="sec-content" style="display:none">
-        <div class="card"><span class="box-label">Select Target Topic</span><select id="sel-p-topic" onchange="updatePurpose()"><option value="homework help app">Homework Help App</option><option value="book exchange service">Book Exchange Service</option><option value="recycled clothing store">Recycled Clothing Store</option><option value="art class for kids">Art Class for Kids</option></select><span class="box-label">Choose Expression</span><select id="sel-p-exp" onchange="updatePurpose()"></select><div class="practice-zone" id="zone-p">--- Select to Start ---</div><div class="btn-group"><button class="btn-m btn-listen" onclick="handleSpeak('p')">🔊 Listen</button><button class="btn-m btn-rec" onclick="handleRec('p')">🎤 Record</button></div></div>
-    </div>
-
-    <div id="sec3" class="sec-content" style="display:none">
-        <div class="card"><span class="box-label">Choose Date & Expression</span><input type="date" id="det-date" value="2026-07-15" onchange="updateDetail('d')"><select id="sel-d" onchange="updateDetail('d')" style="margin-top:10px"></select><div class="practice-zone" id="zone-d">--- Select to Start ---</div><div class="btn-group"><button class="btn-m btn-listen" onclick="handleSpeak('d')">🔊 Listen</button><button class="btn-m btn-rec" onclick="handleRec('d')">🎤 Record</button></div></div>
-        <div class="card"><span class="box-label">Choose Product Name</span><select id="sel-n" onchange="updateZone('n')"></select><div class="practice-zone" id="zone-n">--- Select to Start ---</div><div class="btn-group"><button class="btn-m btn-listen" onclick="handleSpeak('n')">🔊 Listen</button><button class="btn-m btn-rec" onclick="handleRec('n')">🎤 Record</button></div></div>
-        <div class="card"><span class="box-label">Choose Fee</span>$<input type="number" id="det-fee" value="720" onchange="updateDetail('f')" style="padding:10px; border-radius:8px; border:2px solid #e2e8f0; width:100px;"><select id="sel-f" onchange="updateDetail('f')" style="margin-top:10px"></select><div class="practice-zone" id="zone-f">--- Select to Start ---</div><div class="btn-group"><button class="btn-m btn-listen" onclick="handleSpeak('f')">🔊 Listen</button><button class="btn-m btn-rec" onclick="handleRec('f')">🎤 Record</button></div></div>
-    </div>
-
-    <div id="sec4" class="sec-content" style="display:none">
-        <div class="card"><span class="box-label">Offer Expression</span><select id="sel-o" onchange="updateZone('o')"></select><div class="practice-zone" id="zone-o">--- Select to Start ---</div><div class="btn-group"><button class="btn-m btn-listen" onclick="handleSpeak('o')">🔊 Listen</button><button class="btn-m btn-rec" onclick="handleRec('o')">🎤 Record</button></div></div>
-    </div>
-    
-    <div id="sec5" class="sec-content" style="display:none">
-        <div class="card"><span class="box-label">Invitation Expression</span><select id="sel-inv" onchange="updateZone('inv')"></select><div class="practice-zone" id="zone-inv">--- Select to Start ---</div><div class="btn-group"><button class="btn-m btn-listen" onclick="handleSpeak('inv')">🔊 Listen</button><button class="btn-m btn-rec" onclick="handleRec('inv')">🎤 Record</button></div></div>
-    </div>
-
-    <div id="sec6" class="sec-content" style="display:none">
-        <div class="card"><span class="box-label">Closing</span><select id="sel-c" onchange="updateZone('c')"></select><div class="practice-zone" id="zone-c">--- Select to Start ---</div><div class="btn-group"><button class="btn-m btn-listen" onclick="handleSpeak('c')">🔊 Listen</button><button class="btn-m btn-rec" onclick="handleRec('c')">🎤 Record</button></div></div>
-        <div class="card"><span class="box-label">Thanking</span><select id="sel-t" onchange="updateZone('t')"></select><div class="practice-zone" id="zone-t">--- Select to Start ---</div><div class="btn-group"><button class="btn-m btn-listen" onclick="handleSpeak('t')">🔊 Listen</button><button class="btn-m btn-rec" onclick="handleRec('t')">🎤 Record</button></div></div>
-        <div class="card"><span class="box-label">Questions</span><select id="sel-q" onchange="updateZone('q')"></select><div class="practice-zone" id="zone-q">--- Select to Start ---</div><div class="btn-group"><button class="btn-m btn-listen" onclick="handleSpeak('q')">🔊 Listen</button><button class="btn-m btn-rec" onclick="handleRec('q')">🎤 Record</button></div></div>
+    <div class="edit-zone">
+        <span class="label" style="color:var(--primary)">Edit & Practice Box:</span>
+        <textarea id="practice-text" placeholder="Select a phrase above or type here..."></textarea>
+        <div class="btn-group">
+            <button class="btn-action btn-listen" onclick="speakText()">🔊 Listen</button>
+            <button class="btn-action btn-rec" id="main-rec-btn" onclick="recText()">🎤 Record</button>
+        </div>
     </div>
 </div>
 
 <div id="vocab" class="container">
-    <div class="vocab-section">
-        <span class="vocab-type-label">Verbs</span>
-        <div class="vocab-grid" id="v-verbs"></div>
+    <div class="game-status">
+        🏆 <span id="ko-count">0</span> / <span id="total-count">0</span> Words KO'd!
     </div>
-    <div class="vocab-section">
-        <span class="vocab-type-label">Nouns</span>
-        <div class="vocab-grid" id="v-nouns"></div>
+    
+    <div id="v-verbs-area">
+        <span class="label">Verbs</span>
+        <div class="vocab-grid" id="grid-verbs"></div>
     </div>
-    <div class="vocab-section">
-        <span class="vocab-type-label">Adjectives</span>
-        <div class="vocab-grid" id="v-adjs"></div>
+    <div id="v-nouns-area" style="margin-top:20px">
+        <span class="label">Nouns</span>
+        <div class="vocab-grid" id="grid-nouns"></div>
+    </div>
+    <div id="v-adjs-area" style="margin-top:20px">
+        <span class="label">Adjectives</span>
+        <div class="vocab-grid" id="grid-adjs"></div>
     </div>
 </div>
 
-<div id="modal">
-    <div class="modal-content">
-        <div id="m-icon" style="font-size:3rem"></div>
-        <h2 id="m-title"></h2>
-        <p id="m-msg"></p>
-        <button class="btn-close" onclick="closeModal()">Close & Try Next</button>
-    </div>
-</div>
+<div id="modal"><div class="modal-content"><div id="m-icon" style="font-size:3rem"></div><h2 id="m-title"></h2><p id="m-msg"></p><button style="margin-top:15px; padding:10px 20px;" onclick="closeModal()">Close</button></div></div>
 
 <script>
-    const content = {
-        g: ["Good morning, everybody!", "Good afternoon, everybody!", "Hi/Hello, everybody!"],
-        w: ["Thank you for coming to this briefing session.", "Thank you for coming today.", "Welcome to today’s briefing session."],
-        i: ["My name is Danny Chow and I’m the Marketing Officer at Everyday Fitness.", "I’m Danny Chow, a Marketing Officer at Everyday Fitness."],
-        p_exps: ["Today, I’m going to introduce you to a new [p].", "Today, I’d like to introduce a new [p] to you.", "May I take this opportunity today to introduce a new [p] to you?"],
-        d_exps: ["Starting from [v], we will have a new activity.", "With effect from [v], a new course will be launched."],
-        n: ["Wise Learners", "Great Book Exchange", "Eco Closet", "Best Art Class"],
-        f_exps: ["The course fee is [v] dollars.", "The fee for this service is [v] dollars."],
-        o: ["If you enrol this month, we will offer you a free kit.", "Our company is pleased to offer you a free gift.", "We would be happy to offer you a special discount."],
-        inv: ["I'd like to invite you to a trial class next Friday.", "Would you like to come to our demonstration tomorrow?", "You're invited to our taster session to learn more."],
-        c: ["That’s the end of my briefing.", "That’s all for my briefing."],
-        t: ["Thank you for listening.", "Thank you very much for your attention.", "Thank you for your time."],
-        q: ["Do you have any questions?", "Are there any questions? I’d be pleased to answer them.", "I’d be glad to answer any questions you might have."]
+    const expressions = {
+        1: ["Good morning, everybody!", "Good afternoon, everybody!", "Hi/Hello, everybody!", "Thank you for coming today.", "Welcome to today’s briefing session.", "My name is [Name] and I’m the Manager at [Company]."],
+        2: ["Today, I’m going to introduce you to a new app.", "Today, I’d like to introduce a new book exchange service.", "I'd like to introduce our new recycled clothing store.", "Today, I'll introduce our new art class for kids."],
+        3: ["Starting from 15th July, we will have a new activity.", "With effect from next Monday, a new course will be launched.", "The project is called Wise Learners.", "The course fee is 500 dollars.", "The registration fee is only 50 dollars."],
+        4: ["If you enrol this month, we’ll offer you a free gift.", "We would be happy to offer you a special discount.", "Our company is pleased to offer you a stationery kit."],
+        5: ["I'd like to invite you to a trial class so that you can learn more.", "Would you like to come to our demonstration tomorrow?", "You're invited to our taster session next Friday."],
+        6: ["That’s the end of my briefing.", "Thank you very much for your attention.", "Do you have any questions?", "I’d be glad to answer any questions you might have."]
     };
 
     const vocabs = {
@@ -150,57 +126,26 @@
         adjs: ["creative", "different", "eco-friendly", "elite"]
     };
 
+    let currentSec = 1;
+    let koList = new Set();
+
     function init() {
-        fillSelect('sel-g', content.g);
-        fillSelect('sel-w', content.w);
-        fillSelect('sel-i', content.i);
-        fillSelect('sel-p-exp', content.p_exps);
-        fillSelect('sel-d', content.d_exps);
-        fillSelect('sel-n', content.n);
-        fillSelect('sel-f', content.f_exps);
-        fillSelect('sel-o', content.o);
-        fillSelect('sel-inv', content.inv);
-        fillSelect('sel-c', content.c);
-        fillSelect('sel-t', content.t);
-        fillSelect('sel-q', content.q);
-
-        renderVocab('v-verbs', vocabs.verbs);
-        renderVocab('v-nouns', vocabs.nouns);
-        renderVocab('v-adjs', vocabs.adjs);
+        showSec(1);
+        renderVocabGrid('grid-verbs', vocabs.verbs);
+        renderVocabGrid('grid-nouns', vocabs.nouns);
+        renderVocabGrid('grid-adjs', vocabs.adjs);
+        document.getElementById('total-count').innerText = vocabs.verbs.length + vocabs.nouns.length + vocabs.adjs.length;
     }
 
-    function fillSelect(id, list) {
-        const sel = document.getElementById(id);
-        sel.innerHTML = `<option value="">--- Choose a sentence ---</option>` + list.map(t => `<option value="${t}">${t.substring(0,40)}...</option>`).join('');
+    function showSec(num) {
+        currentSec = num;
+        document.querySelectorAll('.nav-item').forEach((btn, i) => btn.classList.toggle('active', i+1 === num));
+        const pool = document.getElementById('exp-pool');
+        pool.innerHTML = expressions[num].map(exp => `<div class="exp-chip" onclick="selectExp('${exp}')">${exp}</div>`).join('');
     }
 
-    function renderVocab(id, list) {
-        document.getElementById(id).innerHTML = list.map(v => `<div class="v-card"><strong>${v}</strong><button class="btn-m btn-listen" style="width:100%;font-size:0.7rem" onclick="speak('${v}')">🔊 Listen</button><button class="btn-m btn-rec" style="width:100%;margin-top:5px;font-size:0.7rem" onclick="vocabRec(this,'${v}')">🎤 Record</button></div>`).join('');
-    }
-
-    function updateZone(type) {
-        const val = document.getElementById('sel-' + type).value;
-        document.getElementById('zone-' + type).innerText = val || "--- Select to Start ---";
-    }
-
-    function updatePurpose() {
-        const exp = document.getElementById('sel-p-exp').value;
-        const topic = document.getElementById('sel-p-topic').value;
-        if(!exp) return;
-        document.getElementById('zone-p').innerText = exp.replace('[p]', topic);
-    }
-
-    function updateDetail(type) {
-        const exp = document.getElementById('sel-' + type).value;
-        let val = "";
-        if(type === 'd') {
-            const d = document.getElementById('det-date').value;
-            val = d ? new Date(d).toLocaleDateString('en-US', {day:'numeric', month:'long'}) : "";
-        } else {
-            val = document.getElementById('det-fee').value;
-        }
-        if(!exp) return;
-        document.getElementById('zone-' + type).innerText = exp.replace('[v]', val);
+    function selectExp(text) {
+        document.getElementById('practice-text').value = text;
     }
 
     function switchTab(id) {
@@ -209,38 +154,35 @@
         event.target.classList.add('active');
     }
 
-    function showSec(num) {
-        document.querySelectorAll('.sec-content, .nav-item').forEach(el => {
-            if(el.classList.contains('sec-content')) el.style.display = 'none';
-            else el.classList.remove('active');
-        });
-        document.getElementById('sec'+num).style.display = 'block';
-        event.target.classList.add('active');
+    function renderVocabGrid(id, list) {
+        document.getElementById(id).innerHTML = list.map(v => `
+            <div class="v-card" id="card-${v}">
+                <span class="ko-stamp">KO ✅</span>
+                <strong>${v}</strong>
+                <button class="v-btn-rec" onclick="vocabGameRec(this, '${v}')">🎤 Practice</button>
+            </div>
+        `).join('');
     }
 
-    function speak(t) {
+    function speakText() {
         window.speechSynthesis.cancel();
-        const m = new SpeechSynthesisUtterance(t);
+        const m = new SpeechSynthesisUtterance(document.getElementById('practice-text').value);
         m.lang = 'en-US'; m.rate = 0.85;
         window.speechSynthesis.speak(m);
     }
 
-    function handleSpeak(type) {
-        const text = document.getElementById('zone-' + type).innerText;
-        if(text.includes('---')) return;
-        speak(text);
+    function recText() {
+        const btn = document.getElementById('main-rec-btn');
+        const target = document.getElementById('practice-text').value;
+        if(!target) return;
+        startSpeechRec(btn, target, false);
     }
 
-    function handleRec(type) {
-        const text = document.getElementById('zone-' + type).innerText;
-        if(text.includes('---')) return;
-        const btn = event.target;
-        startPractice(btn, text);
+    function vocabGameRec(btn, word) {
+        startSpeechRec(btn, word, true);
     }
 
-    function vocabRec(btn, word) { startPractice(btn, word); }
-
-    function startPractice(btn, targetText) {
+    function startSpeechRec(btn, targetText, isGame) {
         btn.classList.add('recording');
         const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
         const recognition = new Rec();
@@ -248,21 +190,24 @@
         recognition.onresult = (e) => {
             const heard = e.results[0][0].transcript.toLowerCase();
             const target = targetText.toLowerCase().replace(/[^\w\s]/gi, '');
-            const targetWords = target.split(' ').filter(w => w.length > 3);
-            const matches = targetWords.filter(w => heard.includes(w));
-            const isOk = targetWords.length > 0 ? (matches.length / targetWords.length >= 0.7) : heard.includes(target);
-            showModal(isOk, heard, targetText);
+            const isMatch = heard.includes(target) || (target.length > 4 && heard.includes(target.substring(0,4)));
+            
+            if(isGame && isMatch) {
+                document.getElementById('card-' + targetText).classList.add('ko');
+                koList.add(targetText);
+                document.getElementById('ko-count').innerText = koList.size;
+            }
+            showModal(isMatch, heard, targetText);
         };
         recognition.onend = () => btn.classList.remove('recording');
         recognition.start();
     }
 
     function showModal(isOk, heard, target) {
-        document.getElementById('m-icon').innerText = isOk ? "🎉" : "⚠️";
-        document.getElementById('m-title').innerText = isOk ? "Perfect Match!" : "Keep Trying";
-        document.getElementById('m-title').style.color = isOk ? "var(--success)" : "var(--error)";
-        document.getElementById('m-msg').innerHTML = isOk ? `Excellent! I heard: <br><b>"${heard}"</b>` : `I heard: "${heard}"<br>Try to say: <b>"${target}"</b>`;
         document.getElementById('modal').style.display = 'flex';
+        document.getElementById('m-icon').innerText = isOk ? "🔥" : "❌";
+        document.getElementById('m-title').innerText = isOk ? "Excellent!" : "Try Again";
+        document.getElementById('m-msg').innerHTML = isOk ? `Perfect pronunciation! <br>"${heard}"` : `I heard: "${heard}"<br>Target: "${target}"`;
     }
 
     function closeModal() { document.getElementById('modal').style.display = 'none'; }
