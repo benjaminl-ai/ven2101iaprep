@@ -9,6 +9,7 @@
             --primary: #2563eb; --bg: #f3f4f6; --white: #ffffff;
             --accent: #f59e0b; --dark: #1f2937; --success: #10b981; --error: #ef4444;
         }
+        * { box-sizing: border-box; } /* 解決超出藍框問題 */
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--dark); }
         header { background: var(--dark); color: white; padding: 15px; text-align: center; border-bottom: 4px solid var(--primary); }
         
@@ -16,41 +17,40 @@
         .tab-btn { flex: 1; padding: 15px; border: none; background: none; font-weight: bold; cursor: pointer; color: #6b7280; border-bottom: 3px solid transparent; }
         .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
 
-        .container { padding: 15px; max-width: 850px; margin: 0 auto; display: none; }
+        .container { padding: 15px; max-width: 100%; width: 850px; margin: 0 auto; display: none; }
         .container.active { display: block; }
 
         .section-nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 15px; }
         .nav-item { padding: 10px; background: #e5e7eb; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.8rem; }
         .nav-item.active { background: var(--primary); color: white; }
 
-        /* Multi-Box Grid */
-        .box-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 20px; }
-        .card { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-        .box-label { font-weight: bold; color: var(--primary); font-size: 0.9rem; margin-bottom: 10px; display: block; background: #eff6ff; padding: 5px 10px; border-radius: 5px; }
+        .card { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 15px; }
+        .box-label { font-weight: bold; color: var(--primary); font-size: 0.85rem; margin-bottom: 10px; display: block; background: #eff6ff; padding: 5px 10px; border-radius: 5px; }
 
-        .exp-chip { display: block; background: #f8fafc; padding: 8px 12px; border-radius: 8px; font-size: 0.9rem; cursor: pointer; border: 1px solid #e2e8f0; margin-bottom: 6px; transition: 0.2s; }
+        .input-highlight { border: 2px solid var(--accent); background: #fffbeb; padding: 8px; border-radius: 6px; font-weight: bold; width: auto; margin-bottom: 10px; display: inline-block; }
+
+        .exp-chip { display: block; background: #f8fafc; padding: 10px 12px; border-radius: 8px; font-size: 0.9rem; cursor: pointer; border: 1px solid #e2e8f0; margin-bottom: 6px; }
         .exp-chip:hover { border-color: var(--primary); background: #f1f5f9; }
 
-        /* Floating Practice Area */
-        .practice-zone { position: sticky; bottom: 20px; background: white; border: 3px solid var(--primary); border-radius: 15px; padding: 15px; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); z-index: 90; }
-        textarea { width: 100%; height: 60px; border: none; font-size: 1.1rem; font-family: inherit; resize: none; outline: none; margin-bottom: 10px; }
+        /* Practice Area 修正 */
+        .practice-zone { position: sticky; bottom: 15px; background: white; border: 4px solid var(--primary); border-radius: 15px; padding: 15px; box-shadow: 0 -5px 20px rgba(0,0,0,0.1); width: 100%; }
+        textarea { width: 100%; height: 70px; border: none; font-size: 1.1rem; font-family: inherit; resize: none; outline: none; margin-bottom: 10px; display: block; }
         .btn-group { display: flex; gap: 10px; }
         .btn-action { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 5px; }
         .btn-listen { background: #f1f5f9; color: #475569; }
         .btn-rec { background: #fee2e2; color: #b91c1c; }
-        .btn-rec.recording { background: var(--error); color: white; animation: pulse 1s infinite; }
 
         /* Vocab Game */
         .game-status { background: var(--dark); color: white; padding: 10px; border-radius: 8px; margin-bottom: 15px; text-align: center; }
-        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
-        .v-card { background: white; padding: 15px; border-radius: 10px; border: 1px solid #ddd; text-align: center; position: relative; }
+        .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+        .v-card { background: white; padding: 12px; border-radius: 10px; border: 1px solid #ddd; text-align: center; position: relative; }
         .v-card.ko { background: #dcfce7; border-color: var(--success); }
         .v-card .ko-stamp { display: none; color: var(--success); font-weight: bold; font-size: 0.7rem; position: absolute; top: 5px; right: 5px; }
         .v-card.ko .ko-stamp { display: block; }
+        .v-action-btn { width: 100%; margin-top: 5px; font-size: 0.7rem; padding: 5px; cursor: pointer; border-radius: 4px; border: 1px solid #ccc; background: #fff; }
 
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
         #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; }
-        .modal-content { background: white; padding: 25px; border-radius: 20px; text-align: center; width: 80%; max-width: 350px; }
+        .modal-content { background: white; padding: 25px; border-radius: 20px; text-align: center; width: 85%; max-width: 350px; }
     </style>
 </head>
 <body>
@@ -72,7 +72,7 @@
         <button class="nav-item" onclick="showSec(6)">6. Closing</button>
     </div>
 
-    <div id="sec1" class="box-grid sec-content">
+    <div id="sec1" class="sec-content">
         <div class="card"><span class="box-label">Greeting</span>
             <div class="exp-chip" onclick="selectExp(this)">Good morning, everybody!</div>
             <div class="exp-chip" onclick="selectExp(this)">Good afternoon, everybody!</div>
@@ -89,7 +89,7 @@
         </div>
     </div>
 
-    <div id="sec2" class="box-grid sec-content" style="display:none">
+    <div id="sec2" class="sec-content" style="display:none">
         <div class="card"><span class="box-label">Topic: Homework Help App</span>
             <div class="exp-chip" onclick="selectExp(this)">Today, I’m going to introduce you to a new homework help app.</div>
             <div class="exp-chip" onclick="selectExp(this)">Today, I’d like to introduce a new homework help app to you.</div>
@@ -112,39 +112,58 @@
         </div>
     </div>
 
-    <div id="sec3" class="box-grid sec-content" style="display:none">
-        <div class="card"><span class="box-label">1. Starting from...</span>
-            <input type="date" id="dateInput" onchange="updateDateStr()" style="margin-bottom:10px; padding:5px;">
-            <div class="exp-chip" id="date-exp1" onclick="selectExp(this)">Starting from [Date], we will have a new activity.</div>
-            <div class="exp-chip" id="date-exp2" onclick="selectExp(this)">With effect from [Date], a new course will be launched.</div>
+    <div id="sec3" class="sec-content" style="display:none">
+        <div class="card"><span class="box-label">1. Date & Name (Starting from...)</span>
+            <div class="input-highlight">Select Date: <input type="date" id="det-date" onchange="updateDetailSentences()"></div>
+            <div class="exp-chip" id="sent-hw" onclick="selectExp(this)">Starting from [Date], we’ll have a new app called Wise Learners.</div>
+            <div class="exp-chip" id="sent-be" onclick="selectExp(this)">Starting from [Date], we’ll have a new service called Great Book Exchange.</div>
+            <div class="exp-chip" id="sent-rc" onclick="selectExp(this)">Starting from [Date], we’ll have a new store called Eco Closet.</div>
+            <div class="exp-chip" id="sent-ac" onclick="selectExp(this)">Starting from [Date], we’ll have a new class called Best Art Class.</div>
         </div>
-        <div class="card"><span class="box-label">2. Name</span>
-            <div class="exp-chip" onclick="selectExp(this)">The project is called Wise Learners.</div>
-            <div class="exp-chip" onclick="selectExp(this)">We named this service Great Book Exchange.</div>
-            <div class="exp-chip" onclick="selectExp(this)">The new store is called Eco Closet.</div>
-            <div class="exp-chip" onclick="selectExp(this)">This new class is named Best Art Class.</div>
+        <div class="card"><span class="box-label">2. Fee</span>
+            <div class="input-highlight">Enter Fee: $<input type="number" id="det-fee" value="500" onchange="updateDetailSentences()"></div>
+            <div class="exp-chip" id="sent-fee" onclick="selectExp(this)">The course fee is 500 dollars.</div>
         </div>
-        <div class="card"><span class="box-label">3. Fee</span>
-            $<input type="number" id="feeInput" value="500" onchange="updateFeeStr()" style="width:80px; margin-bottom:10px;">
-            <div class="exp-chip" id="fee-exp1" onclick="selectExp(this)">The course fee is 500 dollars.</div>
-            <div class="exp-chip" id="fee-exp2" onclick="selectExp(this)">The registration fee is 500 dollars.</div>
-        </div>
-    </div>
-
-    <div id="sec4" class="box-grid sec-content" style="display:none">
-        <div class="card"><span class="box-label">Offer</span>
-            <div class="exp-chip" onclick="selectExp(this)">If you enrol this month, we’ll offer you a free kit.</div>
-            <div class="exp-chip" onclick="selectExp(this)">We would be happy to offer you a special discount.</div>
-        </div>
-    </div>
-    <div id="sec5" class="box-grid sec-content" style="display:none">
-        <div class="card"><span class="box-label">Invitation</span>
-            <div class="exp-chip" onclick="selectExp(this)">I'd like to invite you to a trial class next Friday.</div>
-            <div class="exp-chip" onclick="selectExp(this)">Would you like to come to our demonstration tomorrow?</div>
+        <div class="card"><span class="box-label">3. More Information</span>
+            <div class="input-highlight">Choose Heading:</div>
+            <div class="exp-chip" onclick="selectInfo('header', this)">For more information,</div>
+            <div class="exp-chip" onclick="selectInfo('header', this)">For more details,</div>
+            <div class="exp-chip" onclick="selectInfo('header', this)">For more enquiries,</div>
+            <div class="input-highlight">Choose Action:</div>
+            <div class="exp-chip" onclick="selectInfo('action', this)">please call our hotline.</div>
+            <div class="exp-chip" onclick="selectInfo('action', this)">please visit our website.</div>
+            <div class="exp-chip" onclick="selectInfo('action', this)">please refer to our poster.</div>
+            <div class="exp-chip" onclick="selectInfo('action', this)">please refer to our leaflet.</div>
         </div>
     </div>
 
-    <div id="sec6" class="box-grid sec-content" style="display:none">
+    <div id="sec4" class="sec-content" style="display:none">
+        <div class="card"><span class="box-label">1. Condition (If you...)</span>
+            <div class="exp-chip" onclick="selectExp(this)">If you enrol for the course this month,</div>
+            <div class="exp-chip" onclick="selectExp(this)">If you register for the event now,</div>
+            <div class="exp-chip" onclick="selectExp(this)">If you sign up today,</div>
+        </div>
+        <div class="card"><span class="box-label">2. Offer (We'll offer you...)</span>
+            <div class="exp-chip" onclick="selectExp(this)">we'll offer you a 10% discount.</div>
+            <div class="exp-chip" onclick="selectExp(this)">we'll offer you a free stationery kit.</div>
+            <div class="exp-chip" onclick="selectExp(this)">we'll offer you a free souvenir.</div>
+        </div>
+    </div>
+
+    <div id="sec5" class="sec-content" style="display:none">
+        <div class="card"><span class="box-label">1. Invitation (I'd like to...)</span>
+            <div class="exp-chip" onclick="selectExp(this)">I’d like to invite you to our trial class.</div>
+            <div class="exp-chip" onclick="selectExp(this)">I’d like to invite you to our demonstration.</div>
+            <div class="exp-chip" onclick="selectExp(this)">I’d like to invite you to our taster session.</div>
+        </div>
+        <div class="card"><span class="box-label">2. Sign Up Method</span>
+            <div class="exp-chip" onclick="selectExp(this)">If you’re interested, please sign up at our counter.</div>
+            <div class="exp-chip" onclick="selectExp(this)">If you’re interested, please sign up on our website.</div>
+            <div class="exp-chip" onclick="selectExp(this)">If you’re interested, please sign up by calling our hotline.</div>
+        </div>
+    </div>
+
+    <div id="sec6" class="sec-content" style="display:none">
         <div class="card"><span class="box-label">Closing</span>
             <div class="exp-chip" onclick="selectExp(this)">That’s the end of my briefing.</div>
             <div class="exp-chip" onclick="selectExp(this)">That’s all for my briefing.</div>
@@ -160,7 +179,7 @@
     </div>
 
     <div class="practice-zone">
-        <textarea id="practice-text" placeholder="Click any phrase above to edit & practice..."></textarea>
+        <textarea id="practice-text" placeholder="Click any phrase above to practice..."></textarea>
         <div class="btn-group">
             <button class="btn-action btn-listen" onclick="speakText()">🔊 Listen</button>
             <button class="btn-action btn-rec" id="main-rec-btn" onclick="recText()">🎤 Record</button>
@@ -169,7 +188,7 @@
 </div>
 
 <div id="vocab" class="container">
-    <div class="game-status">🏆 KO Count: <span id="ko-count">0</span> / 31</div>
+    <div class="game-status">🏆 KO Count: <span id="ko-count">0</span> / 32</div>
     <span class="box-label">Verbs</span><div class="vocab-grid" id="grid-v"></div><br>
     <span class="box-label">Nouns</span><div class="vocab-grid" id="grid-n"></div><br>
     <span class="box-label">Adjectives</span><div class="vocab-grid" id="grid-a"></div>
@@ -180,11 +199,13 @@
 <script>
     const vocabs = {
         v: ["enrol", "register", "sign up", "visit"],
-        n: ["activities", "demonstration", "enquiries", "families", "hotline", "information", "kit", "leaflet", "manager", "membership", "organisation", "participant", "pop-up store", "poster", "practice", "products", "purchase", "reader", "sales", "store", "subjects", "taster", "trial", "website"],
+        n: ["activities", "demonstration", "enquiries", "families", "hotline", "information", "kit", "leaflet", "limited", "manager", "membership", "organisation", "participant", "pop-up store", "poster", "practice", "products", "purchase", "reader", "sales", "store", "subjects", "taster", "trial", "website"],
         a: ["creative", "different", "eco-friendly", "elite"]
     };
 
     let koList = new Set();
+    let infoHeader = "";
+    let infoAction = "";
 
     function init() {
         renderVocab('grid-v', vocabs.v);
@@ -195,7 +216,8 @@
     function renderVocab(id, list) {
         document.getElementById(id).innerHTML = list.map(v => `
             <div class="v-card" id="v-${v}"><span class="ko-stamp">KO ✅</span><strong>${v}</strong>
-            <button style="width:100%; margin-top:5px;" onclick="vocabPractice(this,'${v}')">🎤 Practice</button></div>
+            <button class="v-action-btn" onclick="speak('${v}')">🔊 Listen</button>
+            <button class="v-action-btn" style="background:#fee2e2" onclick="vocabPractice(this,'${v}')">🎤 Record</button></div>
         `).join('');
     }
 
@@ -210,45 +232,50 @@
             if(el.classList.contains('sec-content')) el.style.display = 'none';
             else el.classList.remove('active');
         });
-        document.getElementById('sec'+num).style.display = 'grid';
+        document.getElementById('sec'+num).style.display = 'block';
         event.target.classList.add('active');
     }
 
-    function selectExp(el) {
-        document.getElementById('practice-text').value = el.innerText;
+    function selectExp(el) { document.getElementById('practice-text').value = el.innerText; }
+
+    function selectInfo(type, el) {
+        if(type === 'header') infoHeader = el.innerText;
+        else infoAction = el.innerText;
+        document.getElementById('practice-text').value = infoHeader + " " + infoAction;
     }
 
-    function updateDateStr() {
-        const d = document.getElementById('dateInput').value;
-        const formatted = d ? new Date(d).toLocaleDateString('en-GB', {day:'numeric', month:'long'}) : "[Date]";
-        document.getElementById('date-exp1').innerText = `Starting from ${formatted}, we will have a new activity.`;
-        document.getElementById('date-exp2').innerText = `With effect from ${formatted}, a new course will be launched.`;
+    function updateDetailSentences() {
+        const d = document.getElementById('det-date').value;
+        const f = document.getElementById('det-fee').value;
+        const dateStr = d ? new Date(d).toLocaleDateString('en-GB', {day:'numeric', month:'long'}) : "[Date]";
+        
+        document.getElementById('sent-hw').innerText = `Starting from ${dateStr}, we’ll have a new app called Wise Learners.`;
+        document.getElementById('sent-be').innerText = `Starting from ${dateStr}, we’ll have a new service called Great Book Exchange.`;
+        document.getElementById('sent-rc').innerText = `Starting from ${dateStr}, we’ll have a new store called Eco Closet.`;
+        document.getElementById('sent-ac').innerText = `Starting from ${dateStr}, we’ll have a new class called Best Art Class.`;
+        document.getElementById('sent-fee').innerText = `The course fee is ${f} dollars.`;
     }
 
-    function updateFeeStr() {
-        const f = document.getElementById('feeInput').value;
-        document.getElementById('fee-exp1').innerText = `The course fee is ${f} dollars.`;
-        document.getElementById('fee-exp2').innerText = `The registration fee is ${f} dollars.`;
-    }
-
-    function speakText() {
+    function speak(t) {
         window.speechSynthesis.cancel();
-        const m = new SpeechSynthesisUtterance(document.getElementById('practice-text').value);
+        const m = new SpeechSynthesisUtterance(t);
         m.lang = 'en-US'; m.rate = 0.85;
         window.speechSynthesis.speak(m);
     }
+
+    function speakText() { speak(document.getElementById('practice-text').value); }
 
     function recText() { startSpeech(document.getElementById('main-rec-btn'), document.getElementById('practice-text').value, false); }
     function vocabPractice(btn, word) { startSpeech(btn, word, true); }
 
     function startSpeech(btn, target, isGame) {
-        btn.innerText = "Listening..."; btn.style.background = "#ef4444";
+        btn.style.opacity = "0.5";
         const Rec = window.webkitSpeechRecognition || window.SpeechRecognition;
         const recognition = new Rec();
         recognition.lang = 'en-US';
         recognition.onresult = (e) => {
             const heard = e.results[0][0].transcript.toLowerCase();
-            const isMatch = heard.includes(target.toLowerCase().split(' ')[0]); // Simple match
+            const isMatch = heard.includes(target.toLowerCase().split(' ')[0]);
             if(isGame && isMatch) {
                 document.getElementById('v-'+target).classList.add('ko');
                 koList.add(target);
@@ -256,7 +283,7 @@
             }
             showModal(isMatch, heard, target);
         };
-        recognition.onend = () => { btn.innerText = isGame ? "🎤 Practice" : "🎤 Record"; btn.style.background = ""; };
+        recognition.onend = () => { btn.style.opacity = "1"; };
         recognition.start();
     }
 
