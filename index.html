@@ -27,7 +27,7 @@
         .card { background: white; border-radius: 12px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 15px; }
         .box-label { font-weight: bold; color: var(--primary); font-size: 0.85rem; margin-bottom: 10px; display: block; background: #eff6ff; padding: 5px 10px; border-radius: 5px; }
 
-        .input-highlight { border: 2px solid var(--accent); background: #fffbeb; padding: 8px; border-radius: 6px; font-weight: bold; width: auto; margin-bottom: 10px; display: inline-block; }
+        .input-highlight { border: 2px solid var(--accent); background: #fffbeb; padding: 8px; border-radius: 6px; font-weight: bold; width: auto; margin-bottom: 10px; display: inline-block; font-size: 0.85rem; }
 
         .exp-chip { display: block; background: #f8fafc; padding: 10px 12px; border-radius: 8px; font-size: 0.9rem; cursor: pointer; border: 1px solid #e2e8f0; margin-bottom: 6px; }
         .exp-chip:hover { border-color: var(--primary); background: #f1f5f9; }
@@ -89,25 +89,16 @@
     </div>
 
     <div id="sec2" class="sec-content" style="display:none">
-        <div class="card"><span class="box-label">Topic: Homework Help App</span>
-            <div class="exp-chip" onclick="selectExp(this)">Today, I’m going to introduce you to a new homework help app.</div>
-            <div class="exp-chip" onclick="selectExp(this)">Today, I’d like to introduce a new homework help app to you.</div>
-            <div class="exp-chip" onclick="selectExp(this)">May I take this opportunity today to introduce a new homework help app to you?</div>
-        </div>
-        <div class="card"><span class="box-label">Topic: Book Exchange Service</span>
-            <div class="exp-chip" onclick="selectExp(this)">Today, I’m going to introduce you to a new book exchange service.</div>
-            <div class="exp-chip" onclick="selectExp(this)">Today, I’d like to introduce a new book exchange service to you.</div>
-            <div class="exp-chip" onclick="selectExp(this)">May I take this opportunity today to introduce a new book exchange service to you?</div>
-        </div>
-        <div class="card"><span class="box-label">Topic: Recycled Clothing Store</span>
-            <div class="exp-chip" onclick="selectExp(this)">Today, I’m going to introduce you to a new recycled clothing store.</div>
-            <div class="exp-chip" onclick="selectExp(this)">Today, I’d like to introduce a new recycled clothing store to you.</div>
-            <div class="exp-chip" onclick="selectExp(this)">May I take this opportunity today to introduce a new recycled clothing store to you?</div>
-        </div>
-        <div class="card"><span class="box-label">Topic: Art Class for Kids</span>
-            <div class="exp-chip" onclick="selectExp(this)">Today, I’m going to introduce you to a new art class for kids.</div>
-            <div class="exp-chip" onclick="selectExp(this)">Today, I’d like to introduce a new art class for kids to you.</div>
-            <div class="exp-chip" onclick="selectExp(this)">May I take this opportunity today to introduce a new art class for kids to you?</div>
+        <div class="card"><span class="box-label">Topic Selection</span>
+            <div class="input-highlight">Choose Heading:</div>
+            <div class="exp-chip" onclick="selectPurpose('header', this)">Today, I’m going to introduce you to</div>
+            <div class="exp-chip" onclick="selectPurpose('header', this)">Today, I’d like to introduce</div>
+            <div class="exp-chip" onclick="selectPurpose('header', this)">May I take this opportunity today to introduce</div>
+            <div class="input-highlight">Choose Topic:</div>
+            <div class="exp-chip" onclick="selectPurpose('topic', this)">a new homework help app to you.</div>
+            <div class="exp-chip" onclick="selectPurpose('topic', this)">a new book exchange service to you.</div>
+            <div class="exp-chip" onclick="selectPurpose('topic', this)">a new recycled clothing store to you.</div>
+            <div class="exp-chip" onclick="selectPurpose('topic', this)">a new art class for kids to you.</div>
         </div>
     </div>
 
@@ -137,15 +128,15 @@
     </div>
 
     <div id="sec4" class="sec-content" style="display:none">
-        <div class="card"><span class="box-label">1. Condition (If you...)</span>
-            <div class="exp-chip" onclick="selectExp(this)">If you enrol for the course this month,</div>
-            <div class="exp-chip" onclick="selectExp(this)">If you register for the event now,</div>
-            <div class="exp-chip" onclick="selectExp(this)">If you sign up today,</div>
-        </div>
-        <div class="card"><span class="box-label">2. Offer (We'll offer you...)</span>
-            <div class="exp-chip" onclick="selectExp(this)">we'll offer you a 10% discount.</div>
-            <div class="exp-chip" onclick="selectExp(this)">we'll offer you a free stationery kit.</div>
-            <div class="exp-chip" onclick="selectExp(this)">we'll offer you a free souvenir.</div>
+        <div class="card"><span class="box-label">Special Offer</span>
+            <div class="input-highlight">Choose Condition:</div>
+            <div class="exp-chip" onclick="selectOffer('cond', this)">If you enrol for the course this month,</div>
+            <div class="exp-chip" onclick="selectOffer('cond', this)">If you register for the event now,</div>
+            <div class="exp-chip" onclick="selectOffer('cond', this)">If you sign up today,</div>
+            <div class="input-highlight">Choose Offer:</div>
+            <div class="exp-chip" onclick="selectOffer('offer', this)">we'll offer you a 10% discount.</div>
+            <div class="exp-chip" onclick="selectOffer('offer', this)">we'll offer you a free stationery kit.</div>
+            <div class="exp-chip" onclick="selectOffer('offer', this)">we'll offer you a free souvenir.</div>
         </div>
     </div>
 
@@ -163,17 +154,16 @@
     </div>
 
     <div id="sec6" class="sec-content" style="display:none">
-        <div class="card"><span class="box-label">Closing</span>
-            <div class="exp-chip" onclick="selectExp(this)">That’s the end of my briefing.</div>
-            <div class="exp-chip" onclick="selectExp(this)">That’s all for my briefing.</div>
-        </div>
-        <div class="card"><span class="box-label">Thank the Audience</span>
-            <div class="exp-chip" onclick="selectExp(this)">Thank you for listening.</div>
-            <div class="exp-chip" onclick="selectExp(this)">Thank you very much for your attention.</div>
-        </div>
-        <div class="card"><span class="box-label">Questions</span>
-            <div class="exp-chip" onclick="selectExp(this)">Do you have any questions?</div>
-            <div class="exp-chip" onclick="selectExp(this)">I’d be glad to answer any questions you might have.</div>
+        <div class="card"><span class="box-label">Closing Combination</span>
+            <div class="input-highlight">Choose Closing Remark:</div>
+            <div class="exp-chip" onclick="selectClose('remark', this)">That’s the end of my briefing.</div>
+            <div class="exp-chip" onclick="selectClose('remark', this)">That’s all for my briefing.</div>
+            <div class="input-highlight">Choose Thanking:</div>
+            <div class="exp-chip" onclick="selectClose('thank', this)">Thank you for listening.</div>
+            <div class="exp-chip" onclick="selectClose('thank', this)">Thank you very much for your attention.</div>
+            <div class="input-highlight">Choose Question:</div>
+            <div class="exp-chip" onclick="selectClose('ques', this)">Do you have any questions?</div>
+            <div class="exp-chip" onclick="selectClose('ques', this)">I’d be glad to answer any questions you might have.</div>
         </div>
     </div>
 
@@ -203,8 +193,14 @@
     };
 
     let koList = new Set();
-    let infoHeader = "";
-    let infoAction = "";
+    // Storage for combinations
+    let combos = {
+        purpose: { header: "", topic: "" },
+        info: { header: "", action: "" },
+        offer: { cond: "", offer: "" },
+        close: { remark: "", thank: "", ques: "" }
+    };
+
     let recognition;
     let isRecording = false;
 
@@ -239,10 +235,24 @@
 
     function selectExp(el) { document.getElementById('practice-text').value = el.innerText; }
 
+    function selectPurpose(type, el) {
+        combos.purpose[type] = el.innerText;
+        document.getElementById('practice-text').value = (combos.purpose.header + " " + combos.purpose.topic).trim();
+    }
+
     function selectInfo(type, el) {
-        if(type === 'header') infoHeader = el.innerText;
-        else infoAction = el.innerText;
-        document.getElementById('practice-text').value = infoHeader + " " + infoAction;
+        combos.info[type] = el.innerText;
+        document.getElementById('practice-text').value = (combos.info.header + " " + combos.info.action).trim();
+    }
+
+    function selectOffer(type, el) {
+        combos.offer[type] = el.innerText;
+        document.getElementById('practice-text').value = (combos.offer.cond + " " + combos.offer.offer).trim();
+    }
+
+    function selectClose(type, el) {
+        combos.close[type] = el.innerText;
+        document.getElementById('practice-text').value = (combos.close.remark + " " + combos.close.thank + " " + combos.close.ques).trim();
     }
 
     function updateDetailSentences() {
@@ -296,23 +306,16 @@
             stopSpeech();
         };
 
-        recognition.onend = () => {
-            if (isRecording) stopSpeech();
-        };
-
+        recognition.onend = () => { if (isRecording) stopSpeech(); };
         recognition.start();
     }
 
     function stopSpeech() {
         if (recognition) recognition.stop();
         isRecording = false;
-        
-        // Reset Main Rec Button
         const mainBtn = document.getElementById('main-rec-btn');
         mainBtn.classList.remove('active');
         mainBtn.innerText = "🎤 Start Recording";
-
-        // Reset All Vocab Rec Buttons
         document.querySelectorAll('.btn-v-rec').forEach(btn => {
             btn.classList.remove('active');
             btn.innerText = "🎤 Record";
