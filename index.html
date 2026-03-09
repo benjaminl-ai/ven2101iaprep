@@ -202,7 +202,7 @@
     <div class="progress-container"><div class="progress-bar" id="v-progress"></div></div>
     <div class="game-status">
         <span>🏆 <b>Mastery Progress</b></span>
-        <span><b id="ko-count">0</b> / 32 ✅</span>
+        <span><b id="ko-count">0</b> / 39 ✅</span>
     </div>
     <span class="box-label">Verbs</span><div class="vocab-grid" id="grid-v"></div><br>
     <span class="box-label">Nouns</span><div class="vocab-grid" id="grid-n"></div><br>
@@ -238,8 +238,8 @@
         const saved = localStorage.getItem('vocab_ko_list_strict');
         if (saved) {
             const arr = JSON.parse(saved);
-            // 確保加載數據不會超過 32
-            koList = new Set(arr.slice(0, 32));
+            // 確保加載數據不會超過 39
+            koList = new Set(arr.slice(0, 39));
         }
         renderVocab('grid-v', vocabs.v);
         renderVocab('grid-n', vocabs.n);
@@ -268,7 +268,7 @@
     }
 
     function updateProgress() {
-        const total = 32;
+        const total = 39;
         // 邏輯修復：強制 koList 數量不超過 total
         let count = koList.size;
         if (count > total) count = total;
@@ -374,8 +374,8 @@
         }
 
         if (isGame && isMatch) { 
-            // 再次檢查確保不會超過 32
-            if (koList.size < 32) {
+            // 再次檢查確保不會超過 39
+            if (koList.size < 39) {
                 document.getElementById('v-' + target).classList.add('ko'); 
                 koList.add(target); 
                 updateProgress(); 
