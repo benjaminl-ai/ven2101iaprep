@@ -57,8 +57,13 @@
         .btn-rec.active { background: var(--error); color: white; animation: pulse-red 1.2s infinite; }
         @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
-        .progress-container { background: #d1d5db; border-radius: 20px; height: 12px; margin-bottom: 15px; overflow: hidden; }
+        .progress-container { background: #d1d5db; border-radius: 20px; height: 12px; margin-bottom: 10px; overflow: hidden; }
         .progress-bar { background: var(--success); height: 100%; width: 0%; transition: width 0.5s ease; border-radius: 20px 0 0 20px; }
+        
+        /* New Reset Button Style */
+        .reset-btn { background: #9ca3af; color: white; border: none; padding: 5px 12px; border-radius: 6px; font-size: 0.75rem; cursor: pointer; font-weight: bold; margin-bottom: 15px; transition: 0.2s; }
+        .reset-btn:hover { background: var(--error); }
+
         .game-status { background: var(--dark); color: white; padding: 10px; border-radius: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
         
         .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
@@ -199,6 +204,8 @@
 
 <div id="vocab" class="container">
     <div class="progress-container"><div class="progress-bar" id="v-progress"></div></div>
+    <button class="reset-btn" onclick="resetProgress()">↺ Reset All Progress</button>
+    
     <div class="game-status">
         <span>🏆 <b>Mastery Progress</b></span>
         <span><b id="ko-count">0</b> / <span id="total-count">39</span> ✅</span>
@@ -247,6 +254,16 @@
         renderVocab('grid-n', vocabs.n);
         renderVocab('grid-a', vocabs.a);
         updateProgress();
+    }
+
+    // New Reset Function
+    function resetProgress() {
+        if(confirm("Are you sure you want to clear all progress? This cannot be undone.")) {
+            koList.clear();
+            localStorage.removeItem('vocab_ko_list_strict');
+            document.querySelectorAll('.v-card').forEach(card => card.classList.remove('ko'));
+            updateProgress();
+        }
     }
 
     function renderVocab(id, list) {
